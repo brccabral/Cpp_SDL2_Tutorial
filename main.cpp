@@ -1,4 +1,4 @@
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <SDL2/SDL.h>
 
 int main()
@@ -31,9 +31,27 @@ int main()
     }
 
     SDL_GLContext context = SDL_GL_CreateContext(window);
+    if (context == nullptr)
+    {
+        fprintf(stderr, "SDL_GL_CreateContext Error: %s\n", SDL_GetError());
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
 
-    const int version = gladLoadGL((GLADloadfunc) SDL_GL_GetProcAddress);
-    printf("GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+    // GLAD Option 1
+    // const int version = gladLoadGL((GLADloadfunc) SDL_GL_GetProcAddress);
+    // printf("GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+
+    // GLAD Option 2
+    if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
+    {
+        fprintf(stderr, "gladLoadGLLoader Error: %u\n", glGetError());
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+    printf("GL %d.%d\n", GLVersion.major, GLVersion.minor);
 
     bool gameIsRunning = true;
     while (gameIsRunning)
