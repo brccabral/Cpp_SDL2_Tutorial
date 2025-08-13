@@ -48,6 +48,16 @@ int main()
             {
                 gameIsRunning = false;
             }
+            if (event.type == SDL_MOUSEMOTION)
+            {
+                printf(
+                        "MouseMotion x = %d xrel = %d y = %d yrel = %d\n", event.motion.x,
+                        event.motion.xrel, event.motion.y, event.motion.yrel);
+            }
+            if (event.type == SDL_KEYDOWN)
+            {
+                printf("KeyDown %d %d\n", event.key.keysym.scancode, event.key.keysym.sym);
+            }
         }
 
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
