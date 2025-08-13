@@ -1,5 +1,19 @@
 #include <SDL2/SDL.h>
 
+void SetPixel(
+        SDL_Surface *surface, const Uint32 x, const Uint32 y, const Uint8 r, const Uint8 g,
+        const Uint8 b)
+{
+    // lock surface to avoid other threads to modify it
+    SDL_LockSurface(surface);
+    auto *pixels = (Uint8 *) surface->pixels;
+    // pay attention to the format (RGB, BGRA, etc).
+    pixels[y * surface->pitch + x * surface->format->BytesPerPixel] = b;
+    pixels[y * surface->pitch + x * surface->format->BytesPerPixel + 1] = g;
+    pixels[y * surface->pitch + x * surface->format->BytesPerPixel + 2] = r;
+    SDL_UnlockSurface(surface);
+}
+
 int main()
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -59,22 +73,13 @@ int main()
                     gameIsRunning = false;
                 }
             }
-            if (event.type == SDL_MOUSEBUTTONDOWN)
+            if (event.button.button == SDL_BUTTON_LEFT)
             {
-                if (event.button.button == SDL_BUTTON_LEFT)
-                {
-                    printf("Mouse Left pressed x = %d y = %d\n", mouseX, mouseY);
-
-                    // lock surface to avoid other threads to modify it
-                    SDL_LockSurface(screen);
-                    // set all pixels bytes to 255
-                    SDL_memset(screen->pixels, 255, screen->h * screen->pitch);
-                    SDL_UnlockSurface(screen);
-                    // need to update window after any modification
-                    SDL_UpdateWindowSurface(window);
-                }
+                printf("Mouse Left pressed x = %d y = %d\n", mouseX, mouseY);
+                SetPixel(screen, mouseX, mouseY, 0, 0, 255);
             }
         }
+        SDL_UpdateWindowSurface(window);
     }
 
     SDL_DestroyWindow(window);
