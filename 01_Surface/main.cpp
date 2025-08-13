@@ -22,6 +22,21 @@ int main()
         return 1;
     }
 
+    SDL_Surface *screen = SDL_GetWindowSurface(window);
+
+    SDL_Surface *image = SDL_LoadBMP("images/demo.bmp");
+    if (image == nullptr)
+    {
+        fprintf(stderr, "SDL_LoadBMP Error: %s\n", SDL_GetError());
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_BlitSurface(image, nullptr, screen, nullptr);
+    SDL_FreeSurface(image);
+
+    SDL_UpdateWindowSurface(window);
+
     bool gameIsRunning = true;
     while (gameIsRunning)
     {
