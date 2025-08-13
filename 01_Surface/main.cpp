@@ -41,6 +41,9 @@ int main()
     while (gameIsRunning)
     {
         SDL_Event event;
+        int mouseX, mouseY;
+        Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
+
         // Start our event loop
         while (SDL_PollEvent(&event))
         {
@@ -60,7 +63,7 @@ int main()
             {
                 if (event.button.button == SDL_BUTTON_LEFT)
                 {
-                    printf("Mouse Left pressed\n");
+                    printf("Mouse Left pressed x = %d y = %d\n", mouseX, mouseY);
 
                     // lock surface to avoid other threads to modify it
                     SDL_LockSurface(screen);
