@@ -57,6 +57,11 @@ int main()
             if (event.type == SDL_KEYDOWN)
             {
                 printf("KeyDown %d %d\n", event.key.keysym.scancode, event.key.keysym.sym);
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    gameIsRunning = false;
+                }
+
             }
         }
 
