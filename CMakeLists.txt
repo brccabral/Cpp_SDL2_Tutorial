@@ -7,3 +7,4 @@ find_package(SDL2 REQUIRED)
 
 add_subdirectory(00_Intro)
 add_subdirectory(01_Surface)
+add_subdirectory(02_RenderDraw)
