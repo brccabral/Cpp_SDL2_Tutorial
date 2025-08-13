@@ -23,6 +23,12 @@ int main()
             640,
             480,
             SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+    if (window == nullptr)
+    {
+        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
 
     SDL_GLContext context = SDL_GL_CreateContext(window);
 
