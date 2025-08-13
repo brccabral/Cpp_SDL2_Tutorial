@@ -56,12 +56,18 @@ int main()
             }
             if (event.type == SDL_KEYDOWN)
             {
-                printf("KeyDown %d %d\n", event.key.keysym.scancode, event.key.keysym.sym);
-                if (event.key.keysym.sym == SDLK_ESCAPE)
+                printf(
+                        "KeyDown %d %d %u\n", event.key.keysym.scancode, event.key.keysym.sym,
+                        event.key.state);
+                if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
                 {
                     gameIsRunning = false;
                 }
-
+            }
+            const Uint8 *state = SDL_GetKeyboardState(nullptr);
+            if (state[SDL_SCANCODE_RIGHT])
+            {
+                printf("Right key pressed\n");
             }
         }
 
