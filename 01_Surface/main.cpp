@@ -56,6 +56,21 @@ int main()
                     gameIsRunning = false;
                 }
             }
+            if (event.type == SDL_MOUSEBUTTONDOWN)
+            {
+                if (event.button.button == SDL_BUTTON_LEFT)
+                {
+                    printf("Mouse Left pressed\n");
+
+                    // lock surface to avoid other threads to modify it
+                    SDL_LockSurface(screen);
+                    // set all pixels bytes to 255
+                    SDL_memset(screen->pixels, 255, screen->h * screen->pitch);
+                    SDL_UnlockSurface(screen);
+                    // need to update window after any modification
+                    SDL_UpdateWindowSurface(window);
+                }
+            }
         }
     }
 
