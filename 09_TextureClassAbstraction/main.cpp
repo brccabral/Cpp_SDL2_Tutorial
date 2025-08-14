@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 #include <SDL2/SDL.h>
 #include "TextureRectangle.h"
 
@@ -44,8 +45,12 @@ int main()
         Uint64 last = 0;
         double deltaTime = 0.0; // seconds
 
-        TextureRectangle tr(renderer, "images/test.bmp");
-        tr.SetDestRect(50, 50, 150, 150);
+        std::vector<TextureRectangle> textureRects;
+        for (auto i = 0; i < 20; ++i)
+        {
+            auto &tr = textureRects.emplace_back(renderer, "images/test.bmp");
+            tr.SetDestRect((50 * i) % 600, (50 * i) % 400, 150, 150);
+        }
 
         while (gameIsRunning)
         {
@@ -86,7 +91,10 @@ int main()
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawLine(renderer, 10, 10, mouseX, mouseY);
 
-            tr.Render(renderer);
+            for (const auto &texture_rect: textureRects)
+            {
+                texture_rect.Render(renderer);
+            }
 
             // show renderer
             SDL_RenderPresent(renderer);
