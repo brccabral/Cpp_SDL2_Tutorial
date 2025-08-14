@@ -54,7 +54,6 @@ int main()
         return 1;
     }
     SDL_FreeSurface(surface);
-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_ADD);
 
     // image destination
     SDL_Rect rect = {50, 50, 150, 150};
@@ -86,6 +85,25 @@ int main()
             {
                 rect2.x = event.motion.x;
                 rect2.y = event.motion.y;
+            }
+            if (event.type == SDL_MOUSEBUTTONDOWN)
+            {
+                if (event.button.button == SDL_BUTTON_LEFT)
+                {
+                    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_ADD);
+                }
+                else if (event.button.button == SDL_BUTTON_RIGHT)
+                {
+                    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+                }
+                else if (event.button.button == SDL_BUTTON_MIDDLE)
+                {
+                    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_MOD);
+                }
+            }
+            else
+            {
+                SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_NONE);
             }
         }
 
