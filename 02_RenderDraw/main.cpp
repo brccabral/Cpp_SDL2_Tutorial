@@ -22,7 +22,16 @@ int main()
         return 1;
     }
 
-    SDL_Surface *screen = SDL_GetWindowSurface(window);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == nullptr)
+    {
+        fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+
+    SDL_Rect rect = {50, 50, 150, 150};
 
     bool gameIsRunning = true;
     while (gameIsRunning)
@@ -50,9 +59,23 @@ int main()
             {
             }
         }
-        SDL_UpdateWindowSurface(window);
+
+        // clear screen
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderClear(renderer);
+
+        // draw stuff
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawLine(renderer, 10, 10, mouseX, mouseY);
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawRect(renderer, &rect);
+
+        // show renderer
+        SDL_RenderPresent(renderer);
     }
 
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
