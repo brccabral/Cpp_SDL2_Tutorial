@@ -57,6 +57,7 @@ int main()
 
     // image destination
     SDL_Rect rect = {50, 50, 150, 150};
+    SDL_Rect rect2 = {50, 50, 150, 150};
 
     bool gameIsRunning = true;
     while (gameIsRunning)
@@ -80,8 +81,10 @@ int main()
                     gameIsRunning = false;
                 }
             }
-            if (event.button.button == SDL_BUTTON_LEFT)
+            if (event.type == SDL_MOUSEMOTION)
             {
+                rect2.x = event.motion.x;
+                rect2.y = event.motion.y;
             }
         }
 
@@ -94,6 +97,7 @@ int main()
         SDL_RenderDrawLine(renderer, 10, 10, mouseX, mouseY);
 
         SDL_RenderCopy(renderer, texture, nullptr, &rect);
+        SDL_RenderCopy(renderer, texture, nullptr, &rect2);
 
         // show renderer
         SDL_RenderPresent(renderer);
