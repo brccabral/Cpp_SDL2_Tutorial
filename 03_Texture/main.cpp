@@ -31,6 +31,29 @@ int main()
         return 1;
     }
 
+    SDL_Surface *surface = SDL_LoadBMP("images/test.bmp");
+    if (surface == nullptr)
+    {
+        fprintf(stderr, "SDL_LoadBMP Error: %s\n", SDL_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture == nullptr)
+    {
+        fprintf(stderr, "SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
+        SDL_FreeSurface(surface);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_FreeSurface(surface);
+
+    // image destination
     SDL_Rect rect = {50, 50, 150, 150};
 
     bool gameIsRunning = true;
@@ -68,13 +91,13 @@ int main()
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawLine(renderer, 10, 10, mouseX, mouseY);
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderCopy(renderer, texture, nullptr, &rect);
 
         // show renderer
         SDL_RenderPresent(renderer);
     }
 
+    SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
