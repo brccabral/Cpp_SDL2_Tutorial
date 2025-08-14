@@ -40,6 +40,8 @@ int main()
         SDL_Quit();
         return 1;
     }
+    // make color 0xFF00FF transparent
+    SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 0xFF, 0, 0xFF));
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (texture == nullptr)
