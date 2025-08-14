@@ -54,6 +54,7 @@ int main()
         return 1;
     }
     SDL_FreeSurface(surface);
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_ADD);
 
     // image destination
     SDL_Rect rect = {50, 50, 150, 150};
