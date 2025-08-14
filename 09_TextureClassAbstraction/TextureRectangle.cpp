@@ -1,19 +1,22 @@
 #include "TextureRectangle.h"
+#include "ResourceManager.h"
+
 
 TextureRectangle::TextureRectangle(SDL_Renderer *renderer, const std::string &filepath)
 {
-    SDL_Surface *surface = SDL_LoadBMP(filepath.c_str());
-    if (surface == nullptr)
+    auto *surface = ResourceManager::GetInstance().GetSurface(filepath);
+    if (surface != nullptr)
     {
-        fprintf(stderr, "SDL_LoadBMP Error: %s\n", SDL_GetError());
+        texture = SDL_CreateTextureFromSurface(renderer, surface);
+        if (texture == nullptr)
+        {
+            fprintf(stderr, "SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
+        }
     }
-
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
-    if (texture == nullptr)
+    else
     {
-        fprintf(stderr, "SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
+        fprintf(stderr, "TextureRectangle Error: %s\n", SDL_GetError());
     }
-    SDL_FreeSurface(surface);
 }
 
 TextureRectangle::~TextureRectangle()

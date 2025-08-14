@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
 #include <SDL2/SDL.h>
+
+#include "ResourceManager.h"
 #include "TextureRectangle.h"
 
 
@@ -117,6 +119,7 @@ int main()
         }
     }
 
+    ResourceManager::Destroy();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
