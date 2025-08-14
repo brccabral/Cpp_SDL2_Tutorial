@@ -31,7 +31,7 @@ int main()
         return 1;
     }
 
-    SDL_Surface *surface = SDL_LoadBMP("images/test.bmp");
+    SDL_Surface *surface = SDL_LoadBMP("images/kong.bmp");
     if (surface == nullptr)
     {
         fprintf(stderr, "SDL_LoadBMP Error: %s\n", SDL_GetError());
@@ -84,7 +84,7 @@ int main()
         }
 
         // clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0xFF, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
         // draw stuff
