@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 int main()
 {
@@ -30,6 +31,43 @@ int main()
         SDL_Quit();
         return 1;
     }
+
+    // types of images we want to use
+    constexpr int flags = IMG_INIT_PNG | IMG_INIT_JPG;
+    // IMG_Init returns which flags have been init
+    const int initResult = IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+    // compare both flags to check if there was any error
+    if ((initResult & flags) != flags)
+    {
+        fprintf(stderr, "IMG_Init Error: %s\n", IMG_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+
+    SDL_Surface *image = IMG_Load("images/mario.png");
+    if (image == nullptr)
+    {
+        fprintf(stderr, "IMG_Load Error: %s\n", IMG_GetError());
+        IMG_Quit();
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, image);
+    if (texture == nullptr)
+    {
+        fprintf(stderr, "SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
+        SDL_FreeSurface(image);
+        IMG_Quit();
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_FreeSurface(image);
 
     constexpr int FPS = 60;
     constexpr int frameDelay = 1000 / FPS;
@@ -74,6 +112,8 @@ int main()
         SDL_SetRenderDrawColor(renderer, 0, 0, 0xFF, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
+        SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+
         // show renderer
         SDL_RenderPresent(renderer);
 
@@ -86,6 +126,8 @@ int main()
         }
     }
 
+    SDL_DestroyTexture(texture);
+    IMG_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
