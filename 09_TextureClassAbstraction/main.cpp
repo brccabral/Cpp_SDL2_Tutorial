@@ -1,49 +1,7 @@
 #include <string>
 #include <SDL2/SDL.h>
+#include "TextureRectangle.h"
 
-class TextureRectangle
-{
-public:
-
-    TextureRectangle(SDL_Renderer *renderer, const std::string &filepath)
-    {
-        SDL_Surface *surface = SDL_LoadBMP(filepath.c_str());
-        if (surface == nullptr)
-        {
-            fprintf(stderr, "SDL_LoadBMP Error: %s\n", SDL_GetError());
-        }
-
-        texture = SDL_CreateTextureFromSurface(renderer, surface);
-        if (texture == nullptr)
-        {
-            fprintf(stderr, "SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
-        }
-        SDL_FreeSurface(surface);
-    }
-
-    ~TextureRectangle()
-    {
-        SDL_DestroyTexture(texture);
-    }
-
-    void SetDestRect(const int x, const int y, const int w, const int h)
-    {
-        destRect.x = x;
-        destRect.y = y;
-        destRect.w = w;
-        destRect.h = h;
-    }
-
-    void Render(SDL_Renderer *renderer) const
-    {
-        SDL_RenderCopy(renderer, texture, nullptr, &destRect);
-    }
-
-private:
-
-    SDL_Texture *texture{};
-    SDL_Rect destRect{};
-};
 
 int main()
 {

@@ -1,5 +1,6 @@
 
-add_executable(09_TextureClassAbstraction main.cpp)
+add_executable(09_TextureClassAbstraction main.cpp
+               TextureRectangle.cpp)
 target_compile_features(09_TextureClassAbstraction PUBLIC cxx_std_17)
 target_link_libraries(09_TextureClassAbstraction PUBLIC ${SDL2_LIBRARIES})
 
