@@ -2,6 +2,7 @@
 add_executable(10_SpriteAnimation main.cpp
                TextureRectangle.cpp
                ResourceManager.cpp
+               AnimatedSprite.cpp
 )
 target_compile_features(10_SpriteAnimation PUBLIC cxx_std_17)
 target_link_libraries(10_SpriteAnimation PUBLIC ${SDL2_LIBRARIES})

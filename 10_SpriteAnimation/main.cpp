@@ -2,8 +2,8 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
+#include "AnimatedSprite.hpp"
 #include "ResourceManager.h"
-#include "TextureRectangle.h"
 
 
 int main()
@@ -47,20 +47,10 @@ int main()
         Uint64 last = 0;
         double deltaTime = 0.0; // seconds
 
-        std::vector<TextureRectangle> textureRects;
-        for (auto i = 0; i < 20; ++i)
-        {
-            // auto &tr = textureRects.emplace_back(renderer, "images/test.bmp");
-            // tr.SetDestRect((50 * i) % 600, (50 * i) % 400, 150, 150);
+        AnimatedSprite animated_sprite(renderer, "images/edited.bmp");
+        animated_sprite.Draw(200, 200, 150, 150);
 
-            // TextureRectangle tr(renderer, "images/test.bmp");
-            // tr.SetDestRect((50 * i) % 600, (50 * i) % 400, 150, 150);
-            // textureRects.push_back(std::move(tr));
-
-            textureRects.push_back(TextureRectangle(renderer, "images/test.bmp"));
-            auto &tr = textureRects.back();
-            tr.SetDestRect((50 * i) % 600, (50 * i) % 400, 150, 150);
-        }
+        static int frameNumber = 0;
 
         while (gameIsRunning)
         {
@@ -101,9 +91,12 @@ int main()
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawLine(renderer, 10, 10, mouseX, mouseY);
 
-            for (const auto &texture_rect: textureRects)
+            animated_sprite.PlayFrame(0, 0, 170, 110, frameNumber);
+            animated_sprite.Render(renderer);
+            frameNumber++;
+            if (frameNumber > 6)
             {
-                texture_rect.Render(renderer);
+                frameNumber = 0;
             }
 
             // show renderer
