@@ -49,9 +49,15 @@ int main()
         for (auto i = 0; i < 20; ++i)
         {
             // auto &tr = textureRects.emplace_back(renderer, "images/test.bmp");
-            TextureRectangle tr(renderer, "images/test.bmp");
+            // tr.SetDestRect((50 * i) % 600, (50 * i) % 400, 150, 150);
+
+            // TextureRectangle tr(renderer, "images/test.bmp");
+            // tr.SetDestRect((50 * i) % 600, (50 * i) % 400, 150, 150);
+            // textureRects.push_back(std::move(tr));
+
+            textureRects.push_back(TextureRectangle(renderer, "images/test.bmp"));
+            auto &tr = textureRects.back();
             tr.SetDestRect((50 * i) % 600, (50 * i) % 400, 150, 150);
-            textureRects.push_back(std::move(tr));
         }
 
         while (gameIsRunning)
