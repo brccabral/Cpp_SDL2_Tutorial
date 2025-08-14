@@ -21,6 +21,32 @@ TextureRectangle::~TextureRectangle()
     SDL_DestroyTexture(texture);
 }
 
+TextureRectangle::TextureRectangle(const TextureRectangle &other)
+    : texture(other.texture), destRect(other.destRect)
+{
+}
+
+TextureRectangle &TextureRectangle::operator=(const TextureRectangle &other)
+{
+    texture = other.texture;
+    destRect = other.destRect;
+    return *this;
+}
+
+TextureRectangle::TextureRectangle(TextureRectangle &&other) noexcept
+    : texture(other.texture), destRect(other.destRect)
+{
+    other.texture = nullptr;
+}
+
+TextureRectangle &TextureRectangle::operator=(TextureRectangle &&other) noexcept
+{
+    texture = other.texture;
+    destRect = other.destRect;
+    other.texture = nullptr;
+    return *this;
+}
+
 void TextureRectangle::SetDestRect(const int x, const int y, const int w, const int h)
 {
     destRect.x = x;
