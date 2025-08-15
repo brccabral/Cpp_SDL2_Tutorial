@@ -3,6 +3,7 @@ add_executable(12_SDLAppAbstraction main.cpp
                TextureRectangle.cpp
                ResourceManager.cpp
                AnimatedSprite.cpp
+               SDLApp.cpp
 )
 target_compile_features(12_SDLAppAbstraction PUBLIC cxx_std_17)
 target_link_libraries(12_SDLAppAbstraction PUBLIC ${SDL2_LIBRARIES})
