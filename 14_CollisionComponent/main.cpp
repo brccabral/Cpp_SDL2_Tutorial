@@ -13,8 +13,12 @@ public:
         object2(GetRenderer(), "images/test.bmp")
     {
         object1.GetTextureRectangle().SetPosition(50, 50);
+        object1.GetCollider2D().SetAbsolutePosition(50, 50);
         object1.GetTextureRectangle().SetDimensions(100, 100);
+        object1.GetCollider2D().SetDimensions(100, 100);
+
         object2.GetTextureRectangle().SetDimensions(100, 100);
+        object2.GetCollider2D().SetDimensions(100, 100);
     }
 
     void EventCallback() override
@@ -39,7 +43,7 @@ public:
             {
                 printf(
                         "IsColliding: %i\n",
-                        object1.GetTextureRectangle().IsColliding(object2.GetTextureRectangle()));
+                        object1.GetCollider2D().IsColliding(object2.GetCollider2D()));
             }
         }
     }
@@ -51,6 +55,7 @@ public:
         SDL_RenderDrawLine(GetRenderer(), 10, 10, GetMouseX(), GetMouseY());
 
         object2.GetTextureRectangle().SetPosition(GetMouseX(), GetMouseY());
+        object2.GetCollider2D().SetAbsolutePosition(GetMouseX(), GetMouseY());
 
         object1.Render();
         object2.Render();

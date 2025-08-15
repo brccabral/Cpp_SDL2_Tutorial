@@ -23,3 +23,8 @@ TextureRectangle &GameObject::GetTextureRectangle()
 {
     return m_sprite;
 }
+
+Collider2D &GameObject::GetCollider2D()
+{
+    return m_collider;
+}

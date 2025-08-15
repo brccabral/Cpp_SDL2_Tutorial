@@ -5,6 +5,7 @@ add_executable(14_CollisionComponent main.cpp
                AnimatedSprite.cpp
                SDLApp.cpp
                GameObject.cpp
+               Collider2D.cpp
 )
 target_compile_features(14_CollisionComponent PUBLIC cxx_std_17)
 target_link_libraries(14_CollisionComponent PUBLIC ${SDL2_LIBRARIES})
