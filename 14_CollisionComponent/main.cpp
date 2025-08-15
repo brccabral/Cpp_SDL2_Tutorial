@@ -58,10 +58,10 @@ public:
         object2.Render();
     }
 
-    void UpdateCallback() override
+    void UpdateCallback(const double deltaTime) override
     {
-        object2.GetTextureRectangle().SetPosition(GetMouseX(), GetMouseY());
-        object2.GetCollider2D().SetAbsolutePosition(GetMouseX(), GetMouseY());
+        object1.Update(deltaTime, 50, 50);
+        object2.Update(deltaTime, GetMouseX(), GetMouseY());
     }
 
 private:

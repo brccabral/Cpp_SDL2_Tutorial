@@ -45,7 +45,7 @@ void SDLApp::RunLoop()
         Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
         EventCallback();
-        UpdateCallback();
+        UpdateCallback(deltaTime);
 
         // clear screen
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);

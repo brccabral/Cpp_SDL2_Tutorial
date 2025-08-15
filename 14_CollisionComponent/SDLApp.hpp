@@ -12,7 +12,7 @@ public:
 
     virtual void EventCallback() = 0;
     virtual void RenderCallback() = 0;
-    virtual void UpdateCallback() = 0;
+    virtual void UpdateCallback(double deltaTime) = 0;
 
     void RunLoop();
 
