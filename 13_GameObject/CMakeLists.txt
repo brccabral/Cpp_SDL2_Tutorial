@@ -4,6 +4,7 @@ add_executable(13_GameObject main.cpp
                ResourceManager.cpp
                AnimatedSprite.cpp
                SDLApp.cpp
+               GameObject.cpp
 )
 target_compile_features(13_GameObject PUBLIC cxx_std_17)
 target_link_libraries(13_GameObject PUBLIC ${SDL2_LIBRARIES})

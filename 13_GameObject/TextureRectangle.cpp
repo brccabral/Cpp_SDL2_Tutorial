@@ -2,6 +2,10 @@
 #include "ResourceManager.h"
 
 
+TextureRectangle::TextureRectangle()
+{
+}
+
 TextureRectangle::TextureRectangle(SDL_Renderer *renderer, const std::string &filepath)
 {
     auto *surface = ResourceManager::GetInstance().GetSurface(filepath);

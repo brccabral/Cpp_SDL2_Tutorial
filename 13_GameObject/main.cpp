@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 
+#include "GameObject.hpp"
 #include "TextureRectangle.h"
 #include "SDLApp.hpp"
 
@@ -33,7 +34,7 @@ public:
             }
             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
             {
-                printf("IsColliding: %i\n", object1.IsColliding(object2));
+                // printf("IsColliding: %i\n", object1.IsColliding(object2));
             }
         }
     }
@@ -44,17 +45,17 @@ public:
         SDL_SetRenderDrawColor(GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawLine(GetRenderer(), 10, 10, GetMouseX(), GetMouseY());
 
-        object1.Draw(50, 50, 100, 100);
-        object2.Draw(GetMouseX(), GetMouseY(), 100, 100);
+        // object1.Draw(50, 50, 100, 100);
+        // object2.Draw(GetMouseX(), GetMouseY(), 100, 100);
 
-        object1.Render(GetRenderer());
-        object2.Render(GetRenderer());
+        object1.Render();
+        object2.Render();
     }
 
 private:
 
-    TextureRectangle object1;
-    TextureRectangle object2;
+    GameObject object1;
+    GameObject object2;
 };
 
 int main()

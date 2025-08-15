@@ -7,6 +7,7 @@ class TextureRectangle
 {
 public:
 
+    TextureRectangle();
     TextureRectangle(SDL_Renderer *renderer, const std::string &filepath);
     ~TextureRectangle();
     TextureRectangle(const TextureRectangle &);
