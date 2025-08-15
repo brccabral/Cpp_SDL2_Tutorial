@@ -54,11 +54,14 @@ public:
         SDL_SetRenderDrawColor(GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawLine(GetRenderer(), 10, 10, GetMouseX(), GetMouseY());
 
-        object2.GetTextureRectangle().SetPosition(GetMouseX(), GetMouseY());
-        object2.GetCollider2D().SetAbsolutePosition(GetMouseX(), GetMouseY());
-
         object1.Render();
         object2.Render();
+    }
+
+    void UpdateCallback() override
+    {
+        object2.GetTextureRectangle().SetPosition(GetMouseX(), GetMouseY());
+        object2.GetCollider2D().SetAbsolutePosition(GetMouseX(), GetMouseY());
     }
 
 private:

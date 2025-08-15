@@ -12,12 +12,13 @@ public:
 
     virtual void EventCallback() = 0;
     virtual void RenderCallback() = 0;
+    virtual void UpdateCallback() = 0;
 
     void RunLoop();
 
-    SDL_Renderer *GetRenderer() const;
-    int GetMouseX() const;
-    int GetMouseY() const;
+    [[nodiscard]] SDL_Renderer *GetRenderer() const;
+    [[nodiscard]] int GetMouseX() const;
+    [[nodiscard]] int GetMouseY() const;
     void StopGame();
     void SetFPS(int fps);
 

@@ -1,8 +1,6 @@
 #include "GameObject.hpp"
 
-GameObject::GameObject()
-{
-}
+GameObject::GameObject() = default;
 
 GameObject::GameObject(SDL_Renderer *renderer, std::string sprite_path)
     : m_renderer(renderer)
@@ -10,9 +8,7 @@ GameObject::GameObject(SDL_Renderer *renderer, std::string sprite_path)
     m_sprite = TextureRectangle(renderer, sprite_path);
 }
 
-GameObject::~GameObject()
-{
-}
+GameObject::~GameObject() = default;
 
 void GameObject::Render() const
 {
