@@ -16,3 +16,9 @@ void Collider2D::SetDimensions(const int &w, const int &h)
     colliderRect.w = w;
     colliderRect.h = h;
 }
+
+void Collider2D::Render(SDL_Renderer *renderer) const
+{
+    SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderDrawRect(renderer, &colliderRect);
+}

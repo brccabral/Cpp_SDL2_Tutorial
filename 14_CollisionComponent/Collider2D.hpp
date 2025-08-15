@@ -14,6 +14,8 @@ public:
     void SetAbsolutePosition(const int &x, const int &y);
     void SetDimensions(const int &w, const int &h);
 
+    void Render(SDL_Renderer *renderer) const;
+
 private:
 
     SDL_Rect colliderRect{};

@@ -10,7 +10,7 @@ class GameObject
 public:
 
     GameObject();
-    GameObject(SDL_Renderer *renderer, std::string sprite_path);
+    GameObject(SDL_Renderer *renderer, const std::string &sprite_path);
     ~GameObject();
 
     void Update(double deltaTime, int x, int y);
