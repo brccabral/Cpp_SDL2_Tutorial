@@ -21,6 +21,8 @@ public:
 
     SDL_bool IsColliding(const TextureRectangle &other) const;
 
+    const SDL_Rect &GetDestRect() const;
+
 private:
 
     SDL_Texture *texture{};

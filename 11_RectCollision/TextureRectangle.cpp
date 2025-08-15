@@ -73,5 +73,10 @@ void TextureRectangle::Draw(const int x, const int y, const int w, const int h)
 
 SDL_bool TextureRectangle::IsColliding(const TextureRectangle &other) const
 {
-    return SDL_HasIntersection(&destRect, &other.destRect);
+    return SDL_HasIntersection(&destRect, &other.GetDestRect());
+}
+
+const SDL_Rect &TextureRectangle::GetDestRect() const
+{
+    return destRect;
 }
