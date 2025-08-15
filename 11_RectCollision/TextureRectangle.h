@@ -19,6 +19,8 @@ public:
 
     void Draw(int x, int y, int w, int h);
 
+    SDL_bool IsColliding(const TextureRectangle &other) const;
+
 private:
 
     SDL_Texture *texture{};

@@ -77,8 +77,9 @@ int main()
                         gameIsRunning = false;
                     }
                 }
-                if (event.button.button == SDL_BUTTON_LEFT)
+                if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
                 {
+                    printf("IsColliding: %i\n", object1.IsColliding(object2));
                 }
             }
 
