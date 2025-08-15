@@ -19,14 +19,15 @@ public:
     int GetMouseX() const;
     int GetMouseY() const;
     void StopGame();
+    void SetFPS(int fps);
 
 private:
 
     SDL_Window *window{};
     SDL_Renderer *renderer{};
 
-    const int FPS = 60;
-    const int frameDelay = 1000 / FPS;
+    int FPS = 60;
+    int frameDelay = 1000 / FPS;
 
     bool gameIsRunning = true;
     int mouseX, mouseY;

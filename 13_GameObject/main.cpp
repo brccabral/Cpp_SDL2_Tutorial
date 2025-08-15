@@ -66,6 +66,7 @@ int main()
 {
     {
         MyGame app("SDL2 App Abstraction", 20, 20, 640, 480);
+        app.SetFPS(30);
         app.RunLoop();
     }
 
