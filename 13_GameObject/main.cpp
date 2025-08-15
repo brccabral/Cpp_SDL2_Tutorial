@@ -12,6 +12,9 @@ public:
         SDLApp(title, x, y, w, h), object1(GetRenderer(), "images/test.bmp"),
         object2(GetRenderer(), "images/test.bmp")
     {
+        object1.GetTextureRectangle().SetPosition(50, 50);
+        object1.GetTextureRectangle().SetDimensions(100, 100);
+        object2.GetTextureRectangle().SetDimensions(100, 100);
     }
 
     void EventCallback() override
@@ -34,7 +37,9 @@ public:
             }
             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
             {
-                // printf("IsColliding: %i\n", object1.IsColliding(object2));
+                printf(
+                        "IsColliding: %i\n",
+                        object1.GetTextureRectangle().IsColliding(object2.GetTextureRectangle()));
             }
         }
     }
@@ -45,8 +50,7 @@ public:
         SDL_SetRenderDrawColor(GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawLine(GetRenderer(), 10, 10, GetMouseX(), GetMouseY());
 
-        // object1.Draw(50, 50, 100, 100);
-        // object2.Draw(GetMouseX(), GetMouseY(), 100, 100);
+        object2.GetTextureRectangle().SetPosition(GetMouseX(), GetMouseY());
 
         object1.Render();
         object2.Render();

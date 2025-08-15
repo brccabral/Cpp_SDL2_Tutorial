@@ -14,7 +14,12 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Render()
+void GameObject::Render() const
 {
     m_sprite.Render(m_renderer);
+}
+
+TextureRectangle &GameObject::GetTextureRectangle()
+{
+    return m_sprite;
 }

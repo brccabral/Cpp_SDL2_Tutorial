@@ -12,7 +12,9 @@ public:
     ~GameObject();
 
     void Update();
-    void Render();
+    void Render() const;
+
+    TextureRectangle &GetTextureRectangle();
 
 private:
 

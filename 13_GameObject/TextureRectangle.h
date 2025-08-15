@@ -15,10 +15,10 @@ public:
     TextureRectangle(TextureRectangle &&) noexcept;
     TextureRectangle &operator=(TextureRectangle &&) noexcept;
 
-    void SetDestRect(int x, int y, int w, int h);
     void Render(SDL_Renderer *renderer) const;
 
-    void Draw(int x, int y, int w, int h);
+    void SetPosition(int x, int y);
+    void SetDimensions(int w, int h);
 
     SDL_bool IsColliding(const TextureRectangle &other) const;
 
