@@ -10,10 +10,9 @@ GameObject::GameObject(SDL_Renderer *renderer, const std::string &sprite_path)
 
 GameObject::~GameObject() = default;
 
-void GameObject::Update(const double deltaTime, const int x, const int y)
+void GameObject::Update(const double deltaTime)
 {
-    m_sprite.SetPosition(x, y);
-    m_collider.SetAbsolutePosition(x, y);
+    m_collider.SetAbsolutePosition(m_sprite.GetDestRect().x, m_sprite.GetDestRect().y);
 }
 
 void GameObject::Render() const

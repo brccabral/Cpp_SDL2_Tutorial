@@ -13,7 +13,7 @@ public:
     GameObject(SDL_Renderer *renderer, const std::string &sprite_path);
     ~GameObject();
 
-    void Update(double deltaTime, int x, int y);
+    void Update(double deltaTime);
     void Render() const;
 
     TextureRectangle &GetTextureRectangle();

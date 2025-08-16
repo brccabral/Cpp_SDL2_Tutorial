@@ -9,8 +9,8 @@ class MyGame : public SDLApp
 public:
 
     MyGame(const char *title, const int x, const int y, const int w, const int h) :
-        SDLApp(title, x, y, w, h), object1(GetRenderer(), "images/test.bmp"),
-        object2(GetRenderer(), "images/test.bmp")
+        SDLApp(title, x, y, w, h), object1(GetRenderer(), "images/kong.bmp"),
+        object2(GetRenderer(), "images/kong.bmp")
     {
         object1.GetTextureRectangle().SetPosition(50, 50);
         object1.GetCollider2D().SetAbsolutePosition(50, 50);
@@ -45,6 +45,10 @@ public:
                         "IsColliding: %i\n",
                         object1.GetCollider2D().IsColliding(object2.GetCollider2D()));
             }
+            if (event.type == SDL_MOUSEMOTION)
+            {
+                object2.GetTextureRectangle().SetPosition(GetMouseX(), GetMouseY());
+            }
         }
     }
 
@@ -60,8 +64,26 @@ public:
 
     void UpdateCallback(const double deltaTime) override
     {
-        object1.Update(deltaTime, 50, 50);
-        object2.Update(deltaTime, GetMouseX(), GetMouseY());
+        const auto obj1Rect = object1.GetTextureRectangle().GetDestRect();
+        static double obj1SpeedX = 1;
+        static double obj1SpeedY = 1;
+        static double x = obj1Rect.x;
+        static double y = obj1Rect.y;
+
+        if (obj1Rect.x > 640 || obj1Rect.x < 0)
+        {
+            obj1SpeedX = -1;
+        }
+        if (obj1Rect.y > 480 || obj1Rect.y < 0)
+        {
+            obj1SpeedY = -1;
+        }
+        x += obj1SpeedX * 60 * deltaTime;
+        y += obj1SpeedY * 60 * deltaTime;
+        object1.GetTextureRectangle().SetPosition(x, y);
+
+        object1.Update(deltaTime);
+        object2.Update(deltaTime);
     }
 
 private:
