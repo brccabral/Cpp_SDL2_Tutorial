@@ -9,14 +9,16 @@ class MyGame : public SDLApp
 public:
 
     MyGame(const char *title, const int x, const int y, const int w, const int h) :
-        SDLApp(title, x, y, w, h), object1(GetRenderer(), "images/kong.bmp"),
-        object2(GetRenderer(), "images/kong.bmp")
+        SDLApp(title, x, y, w, h), object1(GetRenderer()),
+        object2(GetRenderer())
     {
+        object1.SetTextureRect("images/kong.bmp", 0xFF, 0x00, 0xFF);
         object1.GetTextureRectangle().SetPosition(50, 50);
         object1.GetCollider2D().SetAbsolutePosition(50, 50);
         object1.GetTextureRectangle().SetDimensions(100, 100);
         object1.GetCollider2D().SetDimensions(100, 100);
 
+        object2.SetTextureRect("images/kong.bmp");
         object2.GetTextureRectangle().SetDimensions(100, 100);
         object2.GetCollider2D().SetDimensions(100, 100);
     }

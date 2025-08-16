@@ -2,15 +2,37 @@
 #include "ResourceManager.h"
 
 
-TextureRectangle::TextureRectangle()
-{
-}
+TextureRectangle::TextureRectangle() = default;
 
 TextureRectangle::TextureRectangle(SDL_Renderer *renderer, const std::string &filepath)
 {
     auto *surface = ResourceManager::GetInstance().GetSurface(filepath);
     if (surface != nullptr)
     {
+        SDL_SetColorKey(surface, SDL_FALSE, SDL_MapRGB(surface->format, 0, 0, 0));
+        texture = SDL_CreateTextureFromSurface(renderer, surface);
+        if (texture == nullptr)
+        {
+            fprintf(stderr, "SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
+        }
+    }
+    else
+    {
+        fprintf(stderr, "TextureRectangle Error: %s\n", SDL_GetError());
+    }
+}
+
+TextureRectangle::TextureRectangle(
+        SDL_Renderer *renderer, const std::string &filepath, const Uint8 redColorKey,
+        const Uint8 greenColorKey,
+        const Uint8 blueColorKey)
+{
+    auto *surface = ResourceManager::GetInstance().GetSurface(filepath);
+    if (surface != nullptr)
+    {
+        SDL_SetColorKey(
+                surface, SDL_TRUE, SDL_MapRGB(
+                        surface->format, redColorKey, greenColorKey, blueColorKey));
         texture = SDL_CreateTextureFromSurface(renderer, surface);
         if (texture == nullptr)
         {
@@ -28,17 +50,9 @@ TextureRectangle::~TextureRectangle()
     SDL_DestroyTexture(texture);
 }
 
-TextureRectangle::TextureRectangle(const TextureRectangle &other)
-    : texture(other.texture), destRect(other.destRect)
-{
-}
+TextureRectangle::TextureRectangle(const TextureRectangle &other) = default;
 
-TextureRectangle &TextureRectangle::operator=(const TextureRectangle &other)
-{
-    texture = other.texture;
-    destRect = other.destRect;
-    return *this;
-}
+TextureRectangle &TextureRectangle::operator=(const TextureRectangle &other) = default;
 
 TextureRectangle::TextureRectangle(TextureRectangle &&other) noexcept
     : texture(other.texture), destRect(other.destRect)

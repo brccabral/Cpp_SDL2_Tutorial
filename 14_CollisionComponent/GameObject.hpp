@@ -10,11 +10,16 @@ class GameObject
 public:
 
     GameObject();
-    GameObject(SDL_Renderer *renderer, const std::string &sprite_path);
+    explicit GameObject(SDL_Renderer *renderer);
     ~GameObject();
 
     void Update(double deltaTime);
     void Render() const;
+
+    void SetTextureRect(const std::string &sprite_path);
+    void SetTextureRect(
+            const std::string &sprite_path, Uint8 redColorKey, Uint8 greenColorKey,
+            Uint8 blueColorKey);
 
     TextureRectangle &GetTextureRectangle();
     Collider2D &GetCollider2D();

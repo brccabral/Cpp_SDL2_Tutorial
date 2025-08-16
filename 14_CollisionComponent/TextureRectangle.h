@@ -9,6 +9,9 @@ public:
 
     TextureRectangle();
     TextureRectangle(SDL_Renderer *renderer, const std::string &filepath);
+    TextureRectangle(
+            SDL_Renderer *renderer, const std::string &filepath, Uint8 redColorKey,
+            Uint8 greenColorKey, Uint8 blueColorKey);
     ~TextureRectangle();
     TextureRectangle(const TextureRectangle &);
     TextureRectangle &operator=(const TextureRectangle &);
@@ -19,8 +22,9 @@ public:
 
     void SetPosition(int x, int y);
     void SetDimensions(int w, int h);
+    void SetColorKey(Uint8 red, Uint8 green, Uint8 blue);
 
-    SDL_bool IsColliding(const TextureRectangle &other) const;
+    [[nodiscard]] SDL_bool IsColliding(const TextureRectangle &other) const;
 
     const SDL_Rect &GetDestRect() const;
 

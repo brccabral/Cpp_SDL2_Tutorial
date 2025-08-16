@@ -2,10 +2,9 @@
 
 GameObject::GameObject() = default;
 
-GameObject::GameObject(SDL_Renderer *renderer, const std::string &sprite_path)
+GameObject::GameObject(SDL_Renderer *renderer)
     : m_renderer(renderer)
 {
-    m_sprite = TextureRectangle(renderer, sprite_path);
 }
 
 GameObject::~GameObject() = default;
@@ -19,6 +18,17 @@ void GameObject::Render() const
 {
     m_sprite.Render(m_renderer);
     m_collider.Render(m_renderer);
+}
+
+void GameObject::SetTextureRect(const std::string &sprite_path)
+{
+    m_sprite = TextureRectangle(m_renderer, sprite_path);
+}
+
+void GameObject::SetTextureRect(
+        const std::string &sprite_path, Uint8 redColorKey, Uint8 greenColorKey, Uint8 blueColorKey)
+{
+    m_sprite = TextureRectangle(m_renderer, sprite_path, redColorKey, greenColorKey, blueColorKey);
 }
 
 TextureRectangle &GameObject::GetTextureRectangle()
