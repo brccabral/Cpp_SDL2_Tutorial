@@ -74,28 +74,46 @@ public:
                     StopGame();
                 }
             }
-            if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
-            {
-                if (left_paddle.IsColliding(right_paddle.GetAllColliders()))
-                {
-                    collision_sound.Play();
-                }
-            }
-            if (event.type == SDL_MOUSEMOTION)
-            {
-                right_paddle.SetPosition(GetMouseX(), GetMouseY());
-            }
         }
+        const Uint8 *keyboard_state = SDL_GetKeyboardState(nullptr);
+        if (keyboard_state[SDL_SCANCODE_W])
+        {
+            const int old_position_y = left_paddle.GetTextureRectangle().GetPositionY();
+            const int new_position_y = old_position_y - movement_speed;
+            left_paddle.SetPosition(
+                    left_paddle.GetTextureRectangle().GetPositionX(), new_position_y);
+        }
+        if (keyboard_state[SDL_SCANCODE_S])
+        {
+            const int old_position_y = left_paddle.GetTextureRectangle().GetPositionY();
+            const int new_position_y = old_position_y + movement_speed;
+            left_paddle.SetPosition(
+                    left_paddle.GetTextureRectangle().GetPositionX(), new_position_y);
+        }
+
+        if (keyboard_state[SDL_SCANCODE_UP])
+        {
+            const int old_position_y = right_paddle.GetTextureRectangle().GetPositionY();
+            const int new_position_y = old_position_y - movement_speed;
+            right_paddle.SetPosition(
+                    right_paddle.GetTextureRectangle().GetPositionX(), new_position_y);
+        }
+        if (keyboard_state[SDL_SCANCODE_DOWN])
+        {
+            const int old_position_y = right_paddle.GetTextureRectangle().GetPositionY();
+            const int new_position_y = old_position_y + movement_speed;
+            right_paddle.SetPosition(
+                    right_paddle.GetTextureRectangle().GetPositionX(), new_position_y);
+        }
+
     }
 
     void RenderCallback() override
     {
         // draw stuff
-        SDL_SetRenderDrawColor(GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawLine(GetRenderer(), 10, 10, GetMouseX(), GetMouseY());
-
         left_paddle.Render();
         right_paddle.Render();
+        ball.Render();
 
         left_score_text.Render(renderer);
         right_score_text.Render(renderer);
@@ -103,24 +121,6 @@ public:
 
     void UpdateCallback(const double deltaTime) override
     {
-        const auto obj1Rect = left_paddle.GetTextureRectangle().GetDestRect();
-        static double obj1SpeedX = 1;
-        static double obj1SpeedY = 1;
-        static double x = obj1Rect.x;
-        static double y = obj1Rect.y;
-
-        if (obj1Rect.x > 640 || obj1Rect.x < 0)
-        {
-            obj1SpeedX = -1;
-        }
-        if (obj1Rect.y > 480 || obj1Rect.y < 0)
-        {
-            obj1SpeedY = -1;
-        }
-        x += obj1SpeedX * 60 * deltaTime;
-        y += obj1SpeedY * 60 * deltaTime;
-        left_paddle.SetPosition(x, y);
-
         left_paddle.Update(deltaTime);
         right_paddle.Update(deltaTime);
 

@@ -80,6 +80,16 @@ void TextureRectangle::SetDimensions(const int w, const int h)
     destRect.h = h;
 }
 
+int TextureRectangle::GetPositionX() const
+{
+    return destRect.x;
+}
+
+int TextureRectangle::GetPositionY() const
+{
+    return destRect.y;
+}
+
 void TextureRectangle::Render(SDL_Renderer *renderer) const
 {
     SDL_RenderCopy(renderer, texture, nullptr, &destRect);

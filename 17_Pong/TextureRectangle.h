@@ -22,7 +22,8 @@ public:
 
     void SetPosition(int x, int y);
     void SetDimensions(int w, int h);
-    void SetColorKey(Uint8 red, Uint8 green, Uint8 blue);
+    int GetPositionX() const;
+    int GetPositionY() const;
 
     [[nodiscard]] SDL_bool IsColliding(const TextureRectangle &other) const;
 
