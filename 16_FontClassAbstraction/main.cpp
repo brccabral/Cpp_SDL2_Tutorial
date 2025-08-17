@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 
+#include "DynamicText.hpp"
 #include "GameObject.hpp"
 #include "TextureRectangle.h"
 #include "SDLApp.hpp"
@@ -13,7 +14,10 @@ public:
             const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
             const int h) :
         SDLApp(subsystemFlags, title, x, y, w, h), object1(GetRenderer()),
-        object2(GetRenderer()), collision_sound("assets/sounds/collide.wav")
+        object2(GetRenderer()), collision_sound("assets/sounds/collide.wav"),
+        title_dyn_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32),
+        message_dyn_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 16),
+        counter_dyn_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 16)
     {
         int index = 0;
 
@@ -37,6 +41,12 @@ public:
         object2.GetCollider2D(index).SetDimensions(50, 25);
 
         collision_sound.SetupDevice();
+
+        title_dyn_text.SetText(renderer, "SDL2 Tutorial", {0xFF, 0xFF, 0xFF, 0xFF});
+        title_dyn_text.SetPosition({0, 0, 100, 50});
+        message_dyn_text.SetText(renderer, "Message", {0xFF, 0xFF, 0xFF, 0xFF});
+        message_dyn_text.SetPosition({300, 300, 200, 50});
+        counter_dyn_text.SetPosition({50, 300, 50, 50});
     }
 
     void EventCallback() override
@@ -79,6 +89,10 @@ public:
 
         object1.Render();
         object2.Render();
+
+        title_dyn_text.Render(renderer);
+        message_dyn_text.Render(renderer);
+        counter_dyn_text.Render(renderer);
     }
 
     void UpdateCallback(const double deltaTime) override
@@ -103,6 +117,10 @@ public:
 
         object1.Update(deltaTime);
         object2.Update(deltaTime);
+
+        static int counter = 0;
+        counter++;
+        counter_dyn_text.SetText(renderer, std::to_string(counter), {0xFF, 0xFF, 0xFF, 0xFF});
     }
 
 private:
@@ -111,6 +129,10 @@ private:
     GameObject object2;
 
     Sound collision_sound{};
+
+    DynamicText title_dyn_text{};
+    DynamicText message_dyn_text{};
+    DynamicText counter_dyn_text{};
 };
 
 int main()

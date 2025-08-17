@@ -9,6 +9,7 @@ class DynamicText
 {
 public:
 
+    DynamicText() = default;
     DynamicText(const std::string &filepath, int font_size);
     ~DynamicText();
 
@@ -18,7 +19,6 @@ public:
 
 private:
 
-    static SDL_bool isTTF_initialized;
     TTF_Font *m_font = nullptr;
     SDL_Texture *m_texture = nullptr;
     SDL_Rect m_position{};

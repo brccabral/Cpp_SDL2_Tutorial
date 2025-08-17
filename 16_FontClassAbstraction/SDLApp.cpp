@@ -1,5 +1,8 @@
 #include "SDLApp.hpp"
+#include <SDL_ttf.h>
+
 #include "ResourceManager.h"
+
 
 SDLApp::SDLApp(
         const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
@@ -21,10 +24,16 @@ SDLApp::SDLApp(
     {
         fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
     }
+
+    if (TTF_Init() == -1)
+    {
+        fprintf(stderr, "TTF_Init: %s\n", TTF_GetError());
+    }
 }
 
 SDLApp::~SDLApp()
 {
+    TTF_Quit();
     ResourceManager::Destroy();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

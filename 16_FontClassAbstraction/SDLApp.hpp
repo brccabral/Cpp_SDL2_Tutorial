@@ -21,10 +21,13 @@ public:
     void StopGame();
     void SetFPS(int fps);
 
+protected:
+
+    SDL_Renderer *renderer{};
+
 private:
 
     SDL_Window *window{};
-    SDL_Renderer *renderer{};
 
     int FPS = 60;
     int frameDelay = 1000 / FPS;

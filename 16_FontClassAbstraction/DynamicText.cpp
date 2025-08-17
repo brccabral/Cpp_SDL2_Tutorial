@@ -4,15 +4,6 @@
 
 DynamicText::DynamicText(const std::string &filepath, const int font_size)
 {
-    if (!isTTF_initialized && TTF_Init() == -1)
-    {
-        fprintf(stderr, "TTF_Init: %s\n", TTF_GetError());
-    }
-    else
-    {
-        isTTF_initialized = SDL_TRUE;
-    }
-
     m_font = TTF_OpenFont(filepath.c_str(), font_size);
     if (m_font == nullptr)
     {
@@ -24,11 +15,6 @@ DynamicText::~DynamicText()
 {
     SDL_DestroyTexture(m_texture);
     TTF_CloseFont(m_font);
-    if (isTTF_initialized)
-    {
-        TTF_Quit();
-        isTTF_initialized = SDL_FALSE;
-    }
 }
 
 void DynamicText::SetText(
@@ -49,5 +35,3 @@ void DynamicText::Render(SDL_Renderer *renderer) const
 
     SDL_RenderCopy(renderer, m_texture, nullptr, &m_position);
 }
-
-SDL_bool DynamicText::isTTF_initialized = SDL_FALSE;
