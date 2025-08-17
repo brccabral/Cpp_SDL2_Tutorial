@@ -21,6 +21,9 @@ public:
     void StopGame();
     void SetFPS(int fps);
 
+    int GetWindowWidth() const;
+    int GetWindowHeight() const;
+
 protected:
 
     SDL_Renderer *renderer{};
