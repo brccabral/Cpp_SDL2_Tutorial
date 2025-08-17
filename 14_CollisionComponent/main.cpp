@@ -54,9 +54,7 @@ public:
             }
             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
             {
-                // printf(
-                //         "IsColliding: %i\n",
-                //         object1.GetCollider2D().IsColliding(object2.GetCollider2D()));
+                printf("IsColliding: %i\n", object1.IsColliding(object2.GetAllColliders()));
             }
             if (event.type == SDL_MOUSEMOTION)
             {

@@ -56,8 +56,28 @@ Collider2D &GameObject::GetCollider2D(const int index)
     return m_colliders.at(index);
 }
 
+const std::vector<Collider2D> &GameObject::GetAllColliders() const
+{
+    return m_colliders;
+}
+
 int GameObject::AddCollider2D()
 {
     m_colliders.emplace_back();
     return m_colliders.size() - 1;
+}
+
+SDL_bool GameObject::IsColliding(const std::vector<Collider2D> &other_colliders) const
+{
+    for (auto &m_collider: m_colliders)
+    {
+        for (auto &other_collider: other_colliders)
+        {
+            if (m_collider.IsColliding(other_collider))
+            {
+                return SDL_TRUE;
+            }
+        }
+    }
+    return SDL_FALSE;
 }

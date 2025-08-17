@@ -25,7 +25,9 @@ public:
 
     TextureRectangle &GetTextureRectangle();
     Collider2D &GetCollider2D(int index);
+    const std::vector<Collider2D> &GetAllColliders() const;
     int AddCollider2D();
+    [[nodiscard]] SDL_bool IsColliding(const std::vector<Collider2D> &other_colliders) const;
 
 private:
 
