@@ -38,22 +38,9 @@ int main()
         constexpr int FPS = 60;
         constexpr int frameDelay = 1000 / FPS;
 
-        auto dynamic_text = DynamicText();
-        TTF_Font *font = TTF_OpenFont("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32);
-        if (font == nullptr)
-        {
-            fprintf(stderr, "TTF_OpenFont Error: %s\n", TTF_GetError());
-            TTF_Quit();
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_Quit();
-            return 1;
-        }
-
-        SDL_Surface *surfaceText = TTF_RenderText_Solid(font, "SDL2 TTF", {0xFF, 0xFF, 0xFF, 0xFF});
-        SDL_Texture *textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
-        SDL_Rect rectText = {10, 10, surfaceText->w, surfaceText->h};
-        SDL_FreeSurface(surfaceText);
+        auto dynamic_text = DynamicText("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32);
+        dynamic_text.SetText(renderer, "SDL2 TTF", {0xFF, 0xFF, 0xFF, 0xFF});
+        dynamic_text.SetPosition({10, 10, 100, 100});
 
         bool gameIsRunning = true;
 
@@ -95,7 +82,7 @@ int main()
             SDL_SetRenderDrawColor(renderer, 0, 0, 0xFF, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
 
-            SDL_RenderCopy(renderer, textureText, nullptr, &rectText);
+            dynamic_text.Render(renderer);
 
             // show renderer
             SDL_RenderPresent(renderer);
@@ -108,8 +95,6 @@ int main()
                 SDL_Delay((Uint32) (frameDelay - frameTime));
             }
         }
-        SDL_DestroyTexture(textureText);
-        TTF_CloseFont(font);
     }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
