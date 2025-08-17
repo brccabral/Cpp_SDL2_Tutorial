@@ -1,9 +1,11 @@
 #include "SDLApp.hpp"
 #include "ResourceManager.h"
 
-SDLApp::SDLApp(const char *title, const int x, const int y, const int w, const int h)
+SDLApp::SDLApp(
+        const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
+        const int h)
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(subsystemFlags) < 0)
     {
         fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
     }

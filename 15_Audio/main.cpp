@@ -8,8 +8,10 @@ class MyGame : public SDLApp
 {
 public:
 
-    MyGame(const char *title, const int x, const int y, const int w, const int h) :
-        SDLApp(title, x, y, w, h), object1(GetRenderer()),
+    MyGame(
+            const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
+            const int h) :
+        SDLApp(subsystemFlags, title, x, y, w, h), object1(GetRenderer()),
         object2(GetRenderer())
     {
         int index = 0;
@@ -106,7 +108,7 @@ private:
 int main()
 {
     {
-        MyGame app("SDL2 App Abstraction", 20, 20, 640, 480);
+        MyGame app(SDL_INIT_VIDEO | SDL_INIT_AUDIO, "SDL2 App Abstraction", 20, 20, 640, 480);
         app.SetFPS(30);
         app.RunLoop();
     }

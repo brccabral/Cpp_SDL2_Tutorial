@@ -1,5 +1,4 @@
 #pragma once
-#include <functional>
 #include <SDL2/SDL.h>
 
 
@@ -7,7 +6,7 @@ class SDLApp
 {
 public:
 
-    SDLApp(const char *title, int x, int y, int w, int h);
+    SDLApp(Uint32 subsystemFlags, const char *title, int x, int y, int w, int h);
     virtual ~SDLApp();
 
     virtual void EventCallback() = 0;
@@ -31,5 +30,5 @@ private:
     int frameDelay = 1000 / FPS;
 
     bool gameIsRunning = true;
-    int mouseX, mouseY;
+    int mouseX{}, mouseY{};
 };
