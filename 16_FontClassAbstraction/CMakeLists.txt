@@ -1,5 +1,12 @@
 
 add_executable(16_FontClassAbstraction main.cpp
+               TextureRectangle.cpp
+               ResourceManager.cpp
+               AnimatedSprite.cpp
+               SDLApp.cpp
+               GameObject.cpp
+               Collider2D.cpp
+               Sound.cpp
                DynamicText.cpp
 )
 target_compile_features(16_FontClassAbstraction PUBLIC cxx_std_17)

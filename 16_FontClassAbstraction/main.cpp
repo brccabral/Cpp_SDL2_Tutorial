@@ -1,104 +1,125 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 
-#include "DynamicText.hpp"
+#include "GameObject.hpp"
+#include "TextureRectangle.h"
+#include "SDLApp.hpp"
+#include "Sound.hpp"
 
-int main()
+class MyGame : public SDLApp
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+public:
+
+    MyGame(
+            const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
+            const int h) :
+        SDLApp(subsystemFlags, title, x, y, w, h), object1(GetRenderer()),
+        object2(GetRenderer()), collision_sound("assets/sounds/collide.wav")
     {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
-        return 1;
+        int index = 0;
+
+        object1.SetTextureRect("assets/images/kong.bmp", 0xFF, 0x00, 0xFF);
+        object1.GetTextureRectangle().SetDimensions(100, 100);
+
+        index = object1.AddCollider2D();
+        object1.GetCollider2D(index).SetRelPosition(0, 0);
+        object1.GetCollider2D(index).SetDimensions(100, 100);
+
+        object1.SetPosition(50, 50);
+
+        object2.SetTextureRect("assets/images/kong.bmp");
+        object2.GetTextureRectangle().SetDimensions(100, 100);
+
+        index = object2.AddCollider2D();
+        object2.GetCollider2D(index).SetRelPosition(25, 25);
+        object2.GetCollider2D(index).SetDimensions(50, 25);
+        index = object2.AddCollider2D();
+        object2.GetCollider2D(index).SetRelPosition(25, 50);
+        object2.GetCollider2D(index).SetDimensions(50, 25);
+
+        collision_sound.SetupDevice();
     }
 
-    SDL_Window *window = SDL_CreateWindow(
-            "C++ SDL2 Window",
-            20,
-            20,
-            640,
-            480,
-            SDL_WINDOW_SHOWN);
-    if (window == nullptr)
+    void EventCallback() override
     {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-
-    {
-        constexpr int FPS = 60;
-        constexpr int frameDelay = 1000 / FPS;
-
-        auto dynamic_text = DynamicText("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32);
-        dynamic_text.SetText(renderer, "SDL2 TTF", {0xFF, 0xFF, 0xFF, 0xFF});
-        dynamic_text.SetPosition({10, 10, 100, 100});
-
-        bool gameIsRunning = true;
-
-        Uint64 now = SDL_GetPerformanceCounter();
-        Uint64 last = 0;
-        double deltaTime = 0.0; // seconds
-
-        while (gameIsRunning)
+        static SDL_Event event;
+        // Start our event loop
+        while (SDL_PollEvent(&event))
         {
-            last = now;
-            now = SDL_GetPerformanceCounter();
-            deltaTime = (double) ((now - last) * 1000) / SDL_GetPerformanceFrequency();
-            deltaTime /= 1000.0; // convert ms to seconds
-
-            SDL_Event event;
-            int mouseX, mouseY;
-            Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
-
-            // Input
-            // Start our event loop
-            while (SDL_PollEvent(&event))
+            // Handle each specific event
+            if (event.type == SDL_QUIT)
             {
-                // Handle each specific event
-                if (event.type == SDL_QUIT)
+                StopGame();
+            }
+            if (event.type == SDL_KEYDOWN)
+            {
+                if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
                 {
-                    gameIsRunning = false;
-                }
-                if (event.type == SDL_KEYDOWN)
-                {
-                    if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
-                    {
-                        gameIsRunning = false;
-                    }
+                    StopGame();
                 }
             }
-
-            // Draw
-            // clear screen
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0xFF, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-
-            dynamic_text.Render(renderer);
-
-            // show renderer
-            SDL_RenderPresent(renderer);
-
-            // FPS
-            const Uint64 frameTime = ((SDL_GetPerformanceCounter() - now) * 1000) /
-                                     SDL_GetPerformanceFrequency();
-            if (frameDelay > frameTime)
+            if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
             {
-                SDL_Delay((Uint32) (frameDelay - frameTime));
+                if (object1.IsColliding(object2.GetAllColliders()))
+                {
+                    collision_sound.Play();
+                }
+            }
+            if (event.type == SDL_MOUSEMOTION)
+            {
+                object2.SetPosition(GetMouseX(), GetMouseY());
             }
         }
     }
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+
+    void RenderCallback() override
+    {
+        // draw stuff
+        SDL_SetRenderDrawColor(GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawLine(GetRenderer(), 10, 10, GetMouseX(), GetMouseY());
+
+        object1.Render();
+        object2.Render();
+    }
+
+    void UpdateCallback(const double deltaTime) override
+    {
+        const auto obj1Rect = object1.GetTextureRectangle().GetDestRect();
+        static double obj1SpeedX = 1;
+        static double obj1SpeedY = 1;
+        static double x = obj1Rect.x;
+        static double y = obj1Rect.y;
+
+        if (obj1Rect.x > 640 || obj1Rect.x < 0)
+        {
+            obj1SpeedX = -1;
+        }
+        if (obj1Rect.y > 480 || obj1Rect.y < 0)
+        {
+            obj1SpeedY = -1;
+        }
+        x += obj1SpeedX * 60 * deltaTime;
+        y += obj1SpeedY * 60 * deltaTime;
+        object1.SetPosition(x, y);
+
+        object1.Update(deltaTime);
+        object2.Update(deltaTime);
+    }
+
+private:
+
+    GameObject object1;
+    GameObject object2;
+
+    Sound collision_sound{};
+};
+
+int main()
+{
+    {
+        MyGame app(SDL_INIT_VIDEO | SDL_INIT_AUDIO, "SDL2 App Abstraction", 20, 20, 640, 480);
+        app.SetFPS(30);
+        app.RunLoop();
+    }
 
     return 0;
 }
