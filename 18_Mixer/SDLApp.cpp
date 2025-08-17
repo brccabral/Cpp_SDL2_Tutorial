@@ -1,5 +1,6 @@
 #include "SDLApp.hpp"
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 #include "ResourceManager.h"
 
@@ -31,10 +32,16 @@ SDLApp::SDLApp(
     }
 
     srand(time(nullptr));
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
+    {
+        fprintf(stderr, "Mix_OpenAudio Error: %s\n", Mix_GetError());
+    }
 }
 
 SDLApp::~SDLApp()
 {
+    Mix_CloseAudio();
     TTF_Quit();
     ResourceManager::Destroy();
     SDL_DestroyRenderer(renderer);
