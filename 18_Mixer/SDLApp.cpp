@@ -37,6 +37,10 @@ SDLApp::SDLApp(
     {
         fprintf(stderr, "Mix_OpenAudio Error: %s\n", Mix_GetError());
     }
+    else
+    {
+        isMixInitiated = true;
+    }
 }
 
 SDLApp::~SDLApp()
@@ -119,4 +123,45 @@ int SDLApp::GetWindowWidth() const
 int SDLApp::GetWindowHeight() const
 {
     return SDL_GetWindowSurface(window)->h;
+}
+
+void SDLApp::StopMixer() const
+{
+    if (!isMixInitiated)
+    {
+        return;
+    }
+    Mix_HaltMusic();
+}
+
+void SDLApp::PauseMixer() const
+{
+    if (!isMixInitiated)
+    {
+        return;
+    }
+    Mix_PauseMusic();
+}
+
+void SDLApp::SetVolume(const int volume) const
+{
+    if (!isMixInitiated)
+    {
+        return;
+    }
+    if (volume > MIX_MAX_VOLUME || volume < 0)
+    {
+        fprintf(stderr, "SetVolume must be between 0 and %d.", MIX_MAX_VOLUME);
+        return;
+    }
+    Mix_VolumeMusic(volume);
+}
+
+int SDLApp::GetVolume() const
+{
+    if (!isMixInitiated)
+    {
+        return -1;
+    }
+    return Mix_VolumeMusic(-1);
 }

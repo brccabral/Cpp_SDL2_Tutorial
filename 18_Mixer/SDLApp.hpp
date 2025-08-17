@@ -24,9 +24,17 @@ public:
     int GetWindowWidth() const;
     int GetWindowHeight() const;
 
+    void StopMixer() const;
+    void PauseMixer() const;
+
+    // 0 to 128
+    void SetVolume(int volume) const;
+    int GetVolume() const;
+
 protected:
 
     SDL_Renderer *renderer{};
+    bool isMixInitiated;
 
 private:
 

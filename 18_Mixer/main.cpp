@@ -2,6 +2,7 @@
 
 #include "DynamicText.hpp"
 #include "GameObject.hpp"
+#include "Music.hpp"
 #include "TextureRectangle.h"
 #include "SDLApp.hpp"
 #include "Sound.hpp"
@@ -18,7 +19,8 @@ public:
         collision_sound("assets/sounds/Collide.wav"),
         score_sound("assets/sounds/Score.wav"),
         left_score_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32),
-        right_score_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32)
+        right_score_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32),
+        main_music("assets/music/guitarchords.mp3")
     {
         int index = 0;
 
@@ -60,6 +62,9 @@ public:
 
         left_score_text.SetPosition({0, 0, 100, 50});
         right_score_text.SetPosition({500, 0, 100, 50});
+
+        SetVolume(MIX_MAX_VOLUME / 4);
+        main_music.Play(-1);
     }
 
     void EventCallback() override
@@ -192,6 +197,8 @@ private:
     float movement_speed{5.0f};
     float ball_speed{2.0f};
     SDL_Point ball_direction{};
+
+    Music main_music{};
 };
 
 int main()
