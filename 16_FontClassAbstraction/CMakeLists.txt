@@ -1,5 +1,7 @@
 
-add_executable(16_FontClassAbstraction main.cpp)
+add_executable(16_FontClassAbstraction main.cpp
+               DynamicText.cpp
+)
 target_compile_features(16_FontClassAbstraction PUBLIC cxx_std_17)
 target_link_libraries(16_FontClassAbstraction PUBLIC ${SDL2_LIBRARIES} SDL2_ttf)
 
