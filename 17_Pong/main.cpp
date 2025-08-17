@@ -127,12 +127,28 @@ public:
 
     void UpdateCallback(const double deltaTime) override
     {
-        const int ball_x = ball.GetTextureRectangle().GetPositionX();
-        const int ball_y = ball.GetTextureRectangle().GetPositionY();
+        int ball_x = ball.GetTextureRectangle().GetPositionX();
+        int ball_y = ball.GetTextureRectangle().GetPositionY();
 
         if (ball_y < 0 || ball_y > GetWindowHeight() - 20)
         {
             ball_direction.y = -ball_direction.y;
+        }
+
+        if (ball_x < 0 || ball_x > GetWindowWidth() - 20)
+        {
+            if (ball_x < 0)
+            {
+                left_score++;
+                score_sound.Play();
+            }
+            if (ball_x > GetWindowWidth() - 20)
+            {
+                right_score++;
+                score_sound.Play();
+            }
+            ball_x = GetWindowWidth() / 2 - 10;
+            ball_y = GetWindowHeight() / 2 - 10;
         }
 
         ball.SetPosition(
