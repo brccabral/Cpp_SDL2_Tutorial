@@ -11,13 +11,19 @@ GameObject::~GameObject() = default;
 
 void GameObject::Update(const double deltaTime)
 {
-    m_collider.SetAbsolutePosition(m_sprite.GetDestRect().x, m_sprite.GetDestRect().y);
+    for (auto &m_collider: m_colliders)
+    {
+        m_collider.Update(deltaTime);
+    }
 }
 
 void GameObject::Render() const
 {
     m_sprite.Render(m_renderer);
-    m_collider.Render(m_renderer);
+    for (auto &m_collider: m_colliders)
+    {
+        m_collider.Render(m_renderer);
+    }
 }
 
 void GameObject::SetTextureRect(const std::string &sprite_path)
@@ -31,12 +37,27 @@ void GameObject::SetTextureRect(
     m_sprite = TextureRectangle(m_renderer, sprite_path, redColorKey, greenColorKey, blueColorKey);
 }
 
+void GameObject::SetPosition(const int x, const int y)
+{
+    m_sprite.SetPosition(x, y);
+    for (auto &m_collider: m_colliders)
+    {
+        m_collider.SetParentPosition(x, y);
+    }
+}
+
 TextureRectangle &GameObject::GetTextureRectangle()
 {
     return m_sprite;
 }
 
-Collider2D &GameObject::GetCollider2D()
+Collider2D &GameObject::GetCollider2D(const int index)
 {
-    return m_collider;
+    return m_colliders.at(index);
+}
+
+int GameObject::AddCollider2D()
+{
+    m_colliders.emplace_back();
+    return m_colliders.size() - 1;
 }

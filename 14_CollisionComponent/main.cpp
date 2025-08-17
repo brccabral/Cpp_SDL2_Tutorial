@@ -12,15 +12,26 @@ public:
         SDLApp(title, x, y, w, h), object1(GetRenderer()),
         object2(GetRenderer())
     {
+        int index = 0;
+
         object1.SetTextureRect("images/kong.bmp", 0xFF, 0x00, 0xFF);
-        object1.GetTextureRectangle().SetPosition(50, 50);
-        object1.GetCollider2D().SetAbsolutePosition(50, 50);
         object1.GetTextureRectangle().SetDimensions(100, 100);
-        object1.GetCollider2D().SetDimensions(100, 100);
+
+        index = object1.AddCollider2D();
+        object1.GetCollider2D(index).SetRelPosition(0, 0);
+        object1.GetCollider2D(index).SetDimensions(100, 100);
+
+        object1.SetPosition(50, 50);
 
         object2.SetTextureRect("images/kong.bmp");
         object2.GetTextureRectangle().SetDimensions(100, 100);
-        object2.GetCollider2D().SetDimensions(100, 100);
+
+        index = object2.AddCollider2D();
+        object2.GetCollider2D(index).SetRelPosition(25, 25);
+        object2.GetCollider2D(index).SetDimensions(50, 25);
+        index = object2.AddCollider2D();
+        object2.GetCollider2D(index).SetRelPosition(25, 50);
+        object2.GetCollider2D(index).SetDimensions(50, 25);
     }
 
     void EventCallback() override
@@ -43,13 +54,13 @@ public:
             }
             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
             {
-                printf(
-                        "IsColliding: %i\n",
-                        object1.GetCollider2D().IsColliding(object2.GetCollider2D()));
+                // printf(
+                //         "IsColliding: %i\n",
+                //         object1.GetCollider2D().IsColliding(object2.GetCollider2D()));
             }
             if (event.type == SDL_MOUSEMOTION)
             {
-                object2.GetTextureRectangle().SetPosition(GetMouseX(), GetMouseY());
+                object2.SetPosition(GetMouseX(), GetMouseY());
             }
         }
     }
@@ -82,7 +93,7 @@ public:
         }
         x += obj1SpeedX * 60 * deltaTime;
         y += obj1SpeedY * 60 * deltaTime;
-        object1.GetTextureRectangle().SetPosition(x, y);
+        object1.SetPosition(x, y);
 
         object1.Update(deltaTime);
         object2.Update(deltaTime);
