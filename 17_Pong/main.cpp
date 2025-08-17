@@ -18,7 +18,7 @@ public:
         collision_sound("assets/sounds/Collide.wav"),
         score_sound("assets/sounds/Score.wav"),
         left_score_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32),
-        right_score_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 16)
+        right_score_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32)
     {
         int index = 0;
 
@@ -52,10 +52,8 @@ public:
         collision_sound.SetupDevice();
         score_sound.SetupDevice();
 
-        left_score_text.SetText(renderer, "SDL2 Tutorial", {0xFF, 0xFF, 0xFF, 0xFF});
         left_score_text.SetPosition({0, 0, 100, 50});
-        right_score_text.SetText(renderer, "Message", {0xFF, 0xFF, 0xFF, 0xFF});
-        right_score_text.SetPosition({300, 300, 200, 50});
+        right_score_text.SetPosition({500, 0, 100, 50});
     }
 
     void EventCallback() override
@@ -125,6 +123,12 @@ public:
 
         left_paddle.Update(deltaTime);
         right_paddle.Update(deltaTime);
+
+        left_score_text.SetText(
+                renderer, "Left: " + std::to_string(left_score), {0xFF, 0xFF, 0xFF, 0xFF});
+        right_score_text.SetText(
+                renderer, "Right: " + std::to_string(right_score), {0xFF, 0xFF, 0xFF, 0xFF});
+
     }
 
 private:
