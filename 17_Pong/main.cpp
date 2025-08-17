@@ -30,6 +30,7 @@ public:
         left_paddle.GetCollider2D(index).SetDimensions(20, 200);
 
         left_paddle.SetPosition(10, 200);
+        left_paddle.Update(0);
 
         right_paddle.SetTextureRect("assets/images/rightpaddle.bmp");
         right_paddle.GetTextureRectangle().SetDimensions(20, 200);
@@ -39,6 +40,7 @@ public:
         right_paddle.GetCollider2D(index).SetDimensions(20, 200);
 
         right_paddle.SetPosition(610, 200);
+        right_paddle.Update(0);
 
         ball.SetTextureRect("assets/images/ball.bmp");
         ball.GetTextureRectangle().SetDimensions(20, 20);
@@ -48,6 +50,10 @@ public:
         ball.GetCollider2D(index).SetDimensions(20, 20);
 
         ball.SetPosition(GetWindowWidth() / 2 - 10, GetWindowHeight() / 2 - 10);
+        ball.Update(0);
+
+        ball_direction.x = (rand() % 2) * 2 - 1;
+        ball_direction.y = (rand() % 2) * 2 - 1;
 
         collision_sound.SetupDevice();
         score_sound.SetupDevice();
@@ -121,8 +127,30 @@ public:
 
     void UpdateCallback(const double deltaTime) override
     {
+        const int ball_x = ball.GetTextureRectangle().GetPositionX();
+        const int ball_y = ball.GetTextureRectangle().GetPositionY();
+
+        if (ball_y < 0 || ball_y > GetWindowHeight() - 20)
+        {
+            ball_direction.y = -ball_direction.y;
+        }
+
+        ball.SetPosition(
+                ball_x + ball_speed * ball_direction.x, ball_y + ball_speed * ball_direction.y);
+        if (ball.IsColliding(left_paddle.GetAllColliders()))
+        {
+            ball_direction.x = 1;
+            collision_sound.Play();
+        }
+        else if (ball.IsColliding(right_paddle.GetAllColliders()))
+        {
+            ball_direction.x = -1;
+            collision_sound.Play();
+        }
+
         left_paddle.Update(deltaTime);
         right_paddle.Update(deltaTime);
+        ball.Update(deltaTime);
 
         left_score_text.SetText(
                 renderer, "Left: " + std::to_string(left_score), {0xFF, 0xFF, 0xFF, 0xFF});

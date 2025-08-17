@@ -29,6 +29,8 @@ SDLApp::SDLApp(
     {
         fprintf(stderr, "TTF_Init: %s\n", TTF_GetError());
     }
+
+    srand(time(nullptr));
 }
 
 SDLApp::~SDLApp()
