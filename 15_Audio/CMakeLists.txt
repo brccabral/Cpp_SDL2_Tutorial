@@ -6,6 +6,7 @@ add_executable(15_Audio main.cpp
                SDLApp.cpp
                GameObject.cpp
                Collider2D.cpp
+               Sound.cpp
 )
 target_compile_features(15_Audio PUBLIC cxx_std_17)
 target_link_libraries(15_Audio PUBLIC ${SDL2_LIBRARIES})

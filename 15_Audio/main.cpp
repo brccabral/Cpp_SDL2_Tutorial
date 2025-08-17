@@ -3,6 +3,7 @@
 #include "GameObject.hpp"
 #include "TextureRectangle.h"
 #include "SDLApp.hpp"
+#include "Sound.hpp"
 
 class MyGame : public SDLApp
 {
@@ -12,7 +13,7 @@ public:
             const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
             const int h) :
         SDLApp(subsystemFlags, title, x, y, w, h), object1(GetRenderer()),
-        object2(GetRenderer())
+        object2(GetRenderer()), collision_sound("assets/sounds/collide.wav")
     {
         int index = 0;
 
@@ -34,6 +35,8 @@ public:
         index = object2.AddCollider2D();
         object2.GetCollider2D(index).SetRelPosition(25, 50);
         object2.GetCollider2D(index).SetDimensions(50, 25);
+
+        collision_sound.SetupDevice();
     }
 
     void EventCallback() override
@@ -56,7 +59,10 @@ public:
             }
             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
             {
-                printf("IsColliding: %i\n", object1.IsColliding(object2.GetAllColliders()));
+                if (object1.IsColliding(object2.GetAllColliders()))
+                {
+                    collision_sound.Play();
+                }
             }
             if (event.type == SDL_MOUSEMOTION)
             {
@@ -103,6 +109,8 @@ private:
 
     GameObject object1;
     GameObject object2;
+
+    Sound collision_sound{};
 };
 
 int main()
