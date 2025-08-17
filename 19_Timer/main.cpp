@@ -7,6 +7,26 @@
 #include "SDLApp.hpp"
 #include "Sound.hpp"
 
+class TimerParam
+{
+public:
+
+    TimerParam() : random_number(rand())
+    {
+    };
+
+    explicit TimerParam(const int number) : random_number(number)
+    {
+    };
+
+    int random_number;
+
+    int GetRandom() const
+    {
+        return random_number + rand();
+    };
+};
+
 class MyGame : public SDLApp
 {
 public:
@@ -65,6 +85,11 @@ public:
 
         SetVolume(MIX_MAX_VOLUME / 4);
         main_music.Play(-1);
+
+        simple_timer = AddTimer(5000, simple_callback, &simple_param);
+        recurring_timer = AddTimer(1000, recurring_callback, &recurring_param);
+        user_timer = AddTimer(10000, user_event_callback, &user_param);
+
     }
 
     void EventCallback() override
@@ -84,6 +109,16 @@ public:
                 {
                     StopGame();
                 }
+            }
+            if (event.type == MY_EVENT)
+            {
+                const SDL_UserEvent *userEvent = &event.user;
+                const auto user_data = ((TimerParam *) userEvent->data1);
+                printf(
+                        "MY_EVENT = code %d param %d\n", userEvent->code,
+                        user_data->random_number);
+                delete user_data;
+                RemoveTimer(recurring_timer);
             }
         }
         const Uint8 *keyboard_state = SDL_GetKeyboardState(nullptr);
@@ -199,12 +234,56 @@ private:
     SDL_Point ball_direction{};
 
     Music main_music{};
+
+    static Uint32 MY_EVENT;
+    TimerParam simple_param{5};
+    TimerParam recurring_param{};
+    TimerParam user_param{};
+    SDL_TimerID simple_timer{};
+    SDL_TimerID recurring_timer{};
+    SDL_TimerID user_timer{};
+
+    static Uint32 SDLCALL simple_callback(const Uint32 interval, void *param)
+    {
+        printf("simple_callback %d\n", ((TimerParam *) param)->random_number);
+        return 0;
+    }
+
+    static Uint32 SDLCALL recurring_callback(const Uint32 interval, void *param)
+    {
+        printf("recurring_callback %d\n", ((TimerParam *) param)->GetRandom());
+        return interval;
+    }
+
+    static Uint32 SDLCALL user_event_callback(const Uint32 interval, void *param)
+    {
+        printf("user_event_callback %d\n", ((TimerParam *) param)->random_number);
+
+        SDL_UserEvent user_event{};
+        user_event.type = MY_EVENT;
+        user_event.code = rand() % 100;
+        user_event.data1 = new TimerParam();
+        user_event.data2 = nullptr;
+
+        SDL_Event event{};
+        event.type = MY_EVENT;
+        event.user = user_event;
+
+        SDL_PushEvent(&event);
+
+        return 0;
+    }
 };
+
+
+Uint32 MyGame::MY_EVENT = SDL_RegisterEvents(1);
 
 int main()
 {
     {
-        MyGame app(SDL_INIT_VIDEO | SDL_INIT_AUDIO, "SDL2 App Abstraction", 20, 20, 640, 480);
+        MyGame app(
+                SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER, "SDL2 App Abstraction", 20, 20,
+                640, 480);
         app.SetFPS(60);
         app.RunLoop();
     }

@@ -1,4 +1,5 @@
 #pragma once
+#include <set>
 #include <SDL2/SDL.h>
 
 
@@ -31,6 +32,12 @@ public:
     void SetVolume(int volume) const;
     int GetVolume() const;
 
+    // if `callback` is recurring (returns value > 0), then the same `param` is used
+    // in the next call. Therefore, `param` must outlive the Timer.
+    // `callback` must be free function or static
+    SDL_TimerID AddTimer(Uint32 delay, SDL_TimerCallback callback, void *param);
+    void RemoveTimer(SDL_TimerID id);
+
 protected:
 
     SDL_Renderer *renderer{};
@@ -45,4 +52,6 @@ private:
 
     bool gameIsRunning = true;
     int mouseX{}, mouseY{};
+
+    std::set<SDL_TimerID> m_timers;
 };

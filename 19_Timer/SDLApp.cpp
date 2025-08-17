@@ -45,6 +45,10 @@ SDLApp::SDLApp(
 
 SDLApp::~SDLApp()
 {
+    for (const SDL_TimerID &m_timer: m_timers)
+    {
+        SDL_RemoveTimer(m_timer);
+    }
     Mix_CloseAudio();
     TTF_Quit();
     ResourceManager::Destroy();
@@ -164,4 +168,21 @@ int SDLApp::GetVolume() const
         return -1;
     }
     return Mix_VolumeMusic(-1);
+}
+
+SDL_TimerID SDLApp::AddTimer(const Uint32 delay, const SDL_TimerCallback callback, void *param)
+{
+    SDL_TimerID id = SDL_AddTimer(delay, callback, param);
+    m_timers.emplace(id);
+    return id;
+}
+
+void SDLApp::RemoveTimer(const SDL_TimerID id)
+{
+    if (SDL_RemoveTimer(id) == SDL_FALSE)
+    {
+        fprintf(stderr, "RemoveTimer error");
+        return;
+    }
+    m_timers.erase(id);
 }
