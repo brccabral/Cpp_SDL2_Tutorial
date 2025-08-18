@@ -54,12 +54,28 @@ int main()
     SDL_FreeSurface(surface);
 
     // image destination
-    SDL_Rect rect = {50, 50, 150, 150};
+    constexpr SDL_Rect rect = {50, 50, 150, 150};
     SDL_Rect mouse_rect = {0, 0, 150, 150};
 
+    // center = rotating point from destination rect position
+    constexpr SDL_Point center = {rect.w / 2, rect.h / 2};
+
     bool gameIsRunning = true;
+
+    Uint64 now = SDL_GetPerformanceCounter();
+    Uint64 last = 0;
+    double deltaTime = 0.0; // seconds
+
+    constexpr int FPS = 60;
+    constexpr int frameDelay = 1000 / FPS;
+
     while (gameIsRunning)
     {
+        last = now;
+        now = SDL_GetPerformanceCounter();
+        deltaTime = (double) ((now - last) * 1000) / SDL_GetPerformanceFrequency();
+        deltaTime /= 1000.0; // convert ms to seconds
+
         SDL_Event event;
         int mouseX, mouseY;
         Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
@@ -103,10 +119,20 @@ int main()
         }
         SDL_RenderDrawRect(renderer, &mouse_rect);
 
-        SDL_RenderCopy(renderer, texture, nullptr, &rect);
+        static double angle = 0;
+        angle += 1;
+        SDL_RenderCopyEx(renderer, texture, nullptr, &rect, angle, &center, SDL_FLIP_NONE);
 
         // show renderer
         SDL_RenderPresent(renderer);
+
+        // FPS
+        const Uint64 frameTime = ((SDL_GetPerformanceCounter() - now) * 1000) /
+                                 SDL_GetPerformanceFrequency();
+        if (frameDelay > frameTime)
+        {
+            SDL_Delay((Uint32) (frameDelay - frameTime));
+        }
     }
 
     SDL_DestroyTexture(texture);
