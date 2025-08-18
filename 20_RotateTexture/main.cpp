@@ -55,6 +55,7 @@ int main()
 
     // image destination
     SDL_Rect rect = {50, 50, 150, 150};
+    SDL_Rect mouse_rect = {0, 0, 150, 150};
 
     bool gameIsRunning = true;
     while (gameIsRunning)
@@ -62,6 +63,8 @@ int main()
         SDL_Event event;
         int mouseX, mouseY;
         Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
+        mouse_rect.x = mouseX;
+        mouse_rect.y = mouseY;
 
         // Start our event loop
         while (SDL_PollEvent(&event))
@@ -88,8 +91,9 @@ int main()
         SDL_RenderClear(renderer);
 
         // draw stuff
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawLine(renderer, 10, 10, mouseX, mouseY);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderDrawRect(renderer, &mouse_rect);
 
         SDL_RenderCopy(renderer, texture, nullptr, &rect);
 
