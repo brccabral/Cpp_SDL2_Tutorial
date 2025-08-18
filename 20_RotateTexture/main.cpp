@@ -97,6 +97,8 @@ int main()
         SDL_Rect intersection;
         if (SDL_IntersectRect(&rect, &mouse_rect, &intersection))
         {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE);
+            SDL_RenderDrawRect(renderer, &intersection);
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
         }
         SDL_RenderDrawRect(renderer, &mouse_rect);
