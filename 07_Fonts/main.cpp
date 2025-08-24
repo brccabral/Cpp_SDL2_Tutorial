@@ -1,63 +1,31 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#include <exception>
+#include <SDL2pp/SDL2pp.hh>
 
 int main()
+try
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
-        return 1;
-    }
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-    SDL_Window *window = SDL_CreateWindow(
+    SDL2pp::Window window(
             "C++ SDL2 Window",
             20,
             20,
             640,
             480,
             SDL_WINDOW_SHOWN);
-    if (window == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
+    SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    constexpr int FPS = 60;
-    constexpr int frameDelay = 1000 / FPS;
+    const int FPS = 60;
+    const int frameDelay = 1000 / FPS;
 
-    if (TTF_Init() == -1)
-    {
-        fprintf(stderr, "TTF_Init() Error: %s\n", TTF_GetError());
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-    TTF_Font *font = TTF_OpenFont("fonts/8bitOperatorPlus8-Regular.ttf", 32);
-    if (font == nullptr)
-    {
-        fprintf(stderr, "TTF_OpenFont Error: %s\n", TTF_GetError());
-        TTF_Quit();
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
+    SDL2pp::SDLTTF ttf;
 
-    SDL_Surface *surfaceText = TTF_RenderText_Solid(font, "SDL2 TTF", {0xFF, 0xFF, 0xFF, 0xFF});
-    SDL_Texture *textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
-    SDL_Rect rectText = {10, 10, surfaceText->w, surfaceText->h};
-    SDL_FreeSurface(surfaceText);
+    SDL2pp::Font font("fonts/8bitOperatorPlus8-Regular.ttf", 32);
+
+    SDL2pp::Surface surfaceText = font.RenderText_Solid("SDL2 TTF", {0xFF, 0xFF, 0xFF, 0xFF});
+    SDL2pp::Texture textureText{renderer, surfaceText};
+    SDL2pp::Rect rectText = {10, 10, surfaceText.GetWidth(), surfaceText.GetHeight()};
 
     bool gameIsRunning = true;
 
@@ -96,13 +64,13 @@ int main()
 
         // Draw
         // clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0xFF, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(renderer);
+        renderer.SetDrawColor(0, 0, 0xFF, SDL_ALPHA_OPAQUE);
+        renderer.Clear();
 
-        SDL_RenderCopy(renderer, textureText, nullptr, &rectText);
+        renderer.Copy(textureText, SDL2pp::NullOpt, rectText);
 
         // show renderer
-        SDL_RenderPresent(renderer);
+        renderer.Present();
 
         // FPS
         const Uint64 frameTime = ((SDL_GetPerformanceCounter() - now) * 1000) /
@@ -113,12 +81,8 @@ int main()
         }
     }
 
-    TTF_CloseFont(font);
-    TTF_Quit();
-    SDL_DestroyTexture(textureText);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
     return 0;
+} catch (std::exception& e) {
+    fprintf(stderr, "Error: %s\n", e.what());
+	return 1;
 }
