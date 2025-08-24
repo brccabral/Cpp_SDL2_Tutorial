@@ -1,13 +1,9 @@
 #include <glad/glad.h>
-#include <SDL2/SDL.h>
+#include <sdl/sdl_cpp.h>
 
 int main()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
-        return 1;
-    }
+    sdl::Context ctx;
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
@@ -16,26 +12,13 @@ int main()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    SDL_Window *window = SDL_CreateWindow(
-            "C++ SDL2 Window",
-            20,
-            20,
-            640,
-            480,
-            SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
-    if (window == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
+    const sdl::Window window{"C++ SDL2 Window", sdl::Size{640, 480},
+                             SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL};
 
     SDL_GLContext context = SDL_GL_CreateContext(window);
     if (context == nullptr)
     {
         fprintf(stderr, "SDL_GL_CreateContext Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
         return 1;
     }
 
@@ -47,56 +30,50 @@ int main()
     if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
     {
         fprintf(stderr, "gladLoadGLLoader Error: %u\n", glGetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
         return 1;
     }
     printf("GL %d.%d\n", GLVersion.major, GLVersion.minor);
 
     bool gameIsRunning = true;
+    // Event handler
+    sdl::EventHandler handler;
+    handler.on_quit(
+            [&gameIsRunning]()
+            {
+                gameIsRunning = false;
+            });
+    handler.on_press(
+            sdl::KeyCode::Esc, [&gameIsRunning]()
+            {
+                gameIsRunning = false;
+            });
+    handler.on_press(
+            sdl::KeyCode::Right, [&gameIsRunning]()
+            {
+                printf("Right key pressed\n");
+            });
+    handler.on_motion(
+            [](const sdl::s32 x, const sdl::s32 y, const sdl::s32 dx, const sdl::s32 dy)
+            {
+                printf("MouseMotion x = %d xrel = %d y = %d yrel = %d\n", x, dx, y, dy);
+            });
+
+    const auto &mouse_handler = handler.get<sdl::MouseStateHandler>();
+
     while (gameIsRunning)
     {
         glViewport(0, 0, 640, 480);
-        SDL_Event event;
-        // Start our event loop
-        while (SDL_PollEvent(&event))
-        {
-            // Handle each specific event
-            if (event.type == SDL_QUIT)
-            {
-                gameIsRunning = false;
-            }
-            if (event.type == SDL_MOUSEMOTION)
-            {
-                printf(
-                        "MouseMotion x = %d xrel = %d y = %d yrel = %d\n", event.motion.x,
-                        event.motion.xrel, event.motion.y, event.motion.yrel);
-            }
-            if (event.type == SDL_KEYDOWN)
-            {
-                printf(
-                        "KeyDown %d %d %u\n", event.key.keysym.scancode, event.key.keysym.sym,
-                        event.key.state);
-                if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
-                {
-                    gameIsRunning = false;
-                }
-            }
-            const Uint8 *state = SDL_GetKeyboardState(nullptr);
-            if (state[SDL_SCANCODE_RIGHT])
-            {
-                printf("Right key pressed\n");
-            }
-        }
+        const auto mouse_state = mouse_handler.state();
+        const auto mouse_coords = mouse_state.coords();
 
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
         SDL_GL_SwapWindow(window);
+        handler.update();
     }
 
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    SDL_GL_DeleteContext(context);
 
     return 0;
 }
