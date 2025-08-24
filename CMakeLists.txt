@@ -4,19 +4,7 @@ project(SDL2_Tutorial)
 include(GNUInstallDirs)
 
 find_package(sdlcpp REQUIRED)
-
-function (print_cmake_variables_matching pattern)
-    get_cmake_property(_variableNames VARIABLES)
-    string(TOLOWER "${pattern}" pattern_lower)
-    foreach (_variableName ${_variableNames})
-        string(TOLOWER "${_variableName}" variable_lower)
-        if (variable_lower MATCHES "${pattern_lower}")
-            message(STATUS "${_variableName}=${${_variableName}}")
-        endif ()
-    endforeach ()
-endfunction ()
-
-print_cmake_variables_matching("sdl")
+find_package(SDL2pp REQUIRED)
 
 add_subdirectory(00_Intro)
 add_subdirectory(01_Surface)

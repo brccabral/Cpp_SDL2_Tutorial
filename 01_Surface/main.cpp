@@ -1,4 +1,5 @@
-#include <SDL2/SDL.h>
+#include <exception>
+#include  <SDL2pp/SDL2pp.hh>
 
 void SetPixel(
         SDL_Surface *surface, const Uint32 x, const Uint32 y, const Uint8 r, const Uint8 g,
@@ -15,41 +16,26 @@ void SetPixel(
 }
 
 int main()
+try
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
-        return 1;
-    }
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-    SDL_Window *window = SDL_CreateWindow(
+    SDL2pp::Window window (
             "C++ SDL2 Window",
             20,
             20,
             640,
             480,
             SDL_WINDOW_SHOWN);
-    if (window == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
 
-    SDL_Surface *screen = SDL_GetWindowSurface(window);
+    SDL2pp::Surface screen = window.GetSurface();
 
-    SDL_Surface *image = SDL_LoadBMP("images/demo.bmp");
-    if (image == nullptr)
-    {
-        fprintf(stderr, "SDL_LoadBMP Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_BlitSurface(image, nullptr, screen, nullptr);
-    SDL_FreeSurface(image);
+    SDL2pp::Surface image("images/demo.bmp");
 
-    SDL_UpdateWindowSurface(window);
+    SDL2pp::Optional<SDL2pp::Rect> dstrect = SDL2pp::NullOpt;
+    image.Blit(SDL2pp::NullOpt, screen, dstrect);
+
+    window.UpdateSurface();
 
     bool gameIsRunning = true;
     while (gameIsRunning)
@@ -76,14 +62,15 @@ int main()
             if (event.button.button == SDL_BUTTON_LEFT)
             {
                 printf("Mouse Left pressed x = %d y = %d\n", mouseX, mouseY);
-                SetPixel(screen, mouseX, mouseY, 0, 0, 255);
+                SetPixel(screen.Get(), mouseX, mouseY, 0, 0, 255);
             }
         }
-        SDL_UpdateWindowSurface(window);
+        window.UpdateSurface();
     }
 
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
     return 0;
+} catch (std::exception& e) {
+    fprintf(stderr, "Error: %s\n", e.what());
+	return 1;
 }
+
