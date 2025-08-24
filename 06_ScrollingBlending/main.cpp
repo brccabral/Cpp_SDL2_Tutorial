@@ -1,98 +1,55 @@
-#include <SDL2/SDL.h>
+#include <exception>
+#include <SDL2pp/SDL2pp.hh>
 
 int main()
+try
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
-        return 1;
-    }
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-    SDL_Window *window = SDL_CreateWindow(
+    SDL2pp::Window window(
             "C++ SDL2 Window",
             20,
             20,
             640,
             480,
             SDL_WINDOW_SHOWN);
-    if (window == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
+    SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
 
-    SDL_Surface *surface = SDL_LoadBMP("images/pool2.bmp");
-    if (surface == nullptr)
-    {
-        fprintf(stderr, "SDL_LoadBMP Error: %s\n", SDL_GetError());
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
+    SDL2pp::Surface surface("images/pool2.bmp");
 
-    SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface);
-    if (texture1 == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
-        SDL_FreeSurface(surface);
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_SetTextureBlendMode(texture1, SDL_BLENDMODE_NONE);
+    SDL2pp::Texture texture1(renderer, surface);
+    texture1.SetBlendMode(SDL_BLENDMODE_NONE);
 
-    SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface);
-    if (texture2 == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
-        SDL_DestroyTexture(texture1);
-        SDL_FreeSurface(surface);
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_FreeSurface(surface);
+    SDL2pp::Texture texture2(renderer, surface);
 
-    int w, h;
-    SDL_QueryTexture(texture1, nullptr, nullptr, &w, &h);
+    const auto size = texture1.GetSize();
+    int w = size.x, h = size.y;
 
     // rect1 and rect2 will move texture1 Horizontally
-    SDL_Rect rectangle1;
+    SDL2pp::Rect rectangle1;
     rectangle1.x = 0;
     rectangle1.y = 0;
     rectangle1.w = 640;
     rectangle1.h = 480;
 
-    SDL_Rect rectangle2;
+    SDL2pp::Rect rectangle2;
     rectangle2.x = -639;
     rectangle2.y = 0;
     rectangle2.w = 640;
     rectangle2.h = 480;
 
     // rect3 and rect4 will move texture2 Vertically
-    SDL_Rect rectangle3;
+    SDL2pp::Rect rectangle3;
     rectangle3.x = 0;
     rectangle3.y = 0;
     rectangle3.w = 640;
     rectangle3.h = 480;
 
-    SDL_Rect rectangle4;
+    SDL2pp::Rect rectangle4;
     rectangle4.x = 0;
     rectangle4.y = -480;
     rectangle4.w = 640;
@@ -132,22 +89,22 @@ int main()
                 }
                 if (event.key.keysym.scancode == SDL_SCANCODE_R)
                 {
-                    SDL_SetTextureBlendMode(texture2, SDL_BLENDMODE_NONE);
+                    texture2.SetBlendMode(SDL_BLENDMODE_NONE);
                 }
             }
             if (event.type == SDL_MOUSEBUTTONDOWN)
             {
                 if (event.button.button == SDL_BUTTON_LEFT)
                 {
-                    SDL_SetTextureBlendMode(texture2, SDL_BLENDMODE_ADD);
+                    texture2.SetBlendMode(SDL_BLENDMODE_ADD);
                 }
                 else if (event.button.button == SDL_BUTTON_MIDDLE)
                 {
-                    SDL_SetTextureBlendMode(texture2, SDL_BLENDMODE_BLEND);
+                    texture2.SetBlendMode(SDL_BLENDMODE_BLEND);
                 }
                 else if (event.button.button == SDL_BUTTON_RIGHT)
                 {
-                    SDL_SetTextureBlendMode(texture2, SDL_BLENDMODE_MOD);
+                    texture2.SetBlendMode(SDL_BLENDMODE_MOD);
                 }
             }
         }
@@ -178,18 +135,19 @@ int main()
 
         // Draw
         // clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0xFF, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(renderer);
+        renderer.SetDrawColor(0, 0, 0xFF, SDL_ALPHA_OPAQUE);
+        renderer.Clear();
 
         // draw stuff
-        SDL_RenderCopy(renderer, texture1, nullptr, &rectangle1);
-        SDL_RenderCopy(renderer, texture1, nullptr, &rectangle2);
+        renderer.Copy(texture1, SDL2pp::NullOpt, rectangle1);
+        renderer.Copy(texture1, SDL2pp::NullOpt, rectangle2);
+
         // Scrolling up and down
-        SDL_RenderCopy(renderer, texture2, nullptr, &rectangle3);
-        SDL_RenderCopy(renderer, texture2, nullptr, &rectangle4);
+        renderer.Copy(texture2, SDL2pp::NullOpt, rectangle3);
+        renderer.Copy(texture2, SDL2pp::NullOpt, rectangle4);
 
         // show renderer
-        SDL_RenderPresent(renderer);
+        renderer.Present();
 
         // FPS
         const Uint64 frameTime = ((SDL_GetPerformanceCounter() - now) * 1000) /
@@ -200,11 +158,8 @@ int main()
         }
     }
 
-    SDL_DestroyTexture(texture1);
-    SDL_DestroyTexture(texture2);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
     return 0;
+} catch (std::exception& e) {
+    fprintf(stderr, "Error: %s\n", e.what());
+	return 1;
 }
