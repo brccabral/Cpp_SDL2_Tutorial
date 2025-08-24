@@ -2,7 +2,8 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include <SDL2/SDL.h>
+
+#include <SDL2pp/SDL2pp.hh>
 
 
 class ResourceManager
@@ -15,13 +16,12 @@ private:
 
     inline static std::unique_ptr<ResourceManager> instance;
 
-    std::unordered_map<std::string, SDL_Surface *> surfaces;
+    std::unordered_map<std::string, SDL2pp::Surface> surfaces;
 
 public:
 
-    ~ResourceManager();
     static void Destroy();
     static ResourceManager &GetInstance();
 
-    SDL_Surface *GetSurface(const std::string &filepath);
+    SDL2pp::Surface &GetSurface(const std::string &filepath);
 };

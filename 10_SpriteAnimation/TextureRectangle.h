@@ -1,24 +1,23 @@
 #pragma once
 #include <string>
-#include <SDL2/SDL.h>
+#include <SDL2pp/SDL2pp.hh>
 
 
 class TextureRectangle
 {
 public:
 
-    TextureRectangle(SDL_Renderer *renderer, const std::string &filepath);
-    ~TextureRectangle();
-    TextureRectangle(const TextureRectangle &);
-    TextureRectangle &operator=(const TextureRectangle &);
+    TextureRectangle(SDL2pp::Renderer& renderer, const std::string &filepath);
+    TextureRectangle(const TextureRectangle &) = delete;
+    TextureRectangle &operator=(const TextureRectangle &) = delete;
     TextureRectangle(TextureRectangle &&) noexcept;
     TextureRectangle &operator=(TextureRectangle &&) noexcept;
 
     void SetDestRect(int x, int y, int w, int h);
-    void Render(SDL_Renderer *renderer) const;
+    void Render(SDL2pp::Renderer *renderer);
 
 private:
 
-    SDL_Texture *texture{};
-    SDL_Rect destRect{};
+    SDL2pp::Texture texture;
+    SDL2pp::Rect destRect{};
 };

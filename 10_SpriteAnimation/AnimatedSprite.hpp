@@ -1,14 +1,14 @@
 #pragma once
-#include <SDL_render.h>
 #include <string>
+
+#include <SDL2pp/SDL2pp.hh>
 
 
 class AnimatedSprite
 {
 public:
 
-    AnimatedSprite(SDL_Renderer *renderer, const std::string &filepath);
-    ~AnimatedSprite();
+    AnimatedSprite(SDL2pp::Renderer &renderer, const std::string &filepath);
     AnimatedSprite(const AnimatedSprite &) = delete;
     AnimatedSprite(const AnimatedSprite &&) = delete;
     AnimatedSprite &operator=(const AnimatedSprite &) = delete;
@@ -17,11 +17,11 @@ public:
     void Draw(int x, int y, int w, int h);
     void PlayFrame(int x, int y, int w, int h, int frame);
 
-    void Render(SDL_Renderer *renderer) const;
+    void Render(SDL2pp::Renderer &renderer);
 
 private:
 
-    SDL_Rect srcRect{};
-    SDL_Rect dstRect{};
-    SDL_Texture *texture{};
+    SDL2pp::Rect srcRect{};
+    SDL2pp::Rect dstRect{};
+    SDL2pp::Texture texture;
 };
