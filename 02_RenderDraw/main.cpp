@@ -1,37 +1,22 @@
-#include <SDL2/SDL.h>
+#include <exception>
+#include <SDL2pp/SDL2pp.hh>
 
 int main()
+try
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
-        return 1;
-    }
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-    SDL_Window *window = SDL_CreateWindow(
+    SDL2pp::Window window(
             "C++ SDL2 Window",
             20,
             20,
             640,
             480,
             SDL_WINDOW_SHOWN);
-    if (window == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
+    SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    SDL_Rect rect = {50, 50, 150, 150};
+    SDL2pp::Rect rect{50, 50, 150, 150};
 
     bool gameIsRunning = true;
     while (gameIsRunning)
@@ -61,23 +46,22 @@ int main()
         }
 
         // clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(renderer);
+        renderer.SetDrawColor(0, 0, 0, SDL_ALPHA_OPAQUE);
+        renderer.Clear();
 
         // draw stuff
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawLine(renderer, 10, 10, mouseX, mouseY);
+        renderer.SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
+        renderer.DrawLine(10, 10, mouseX, mouseY);
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawRect(renderer, &rect);
+        renderer.SetDrawColor(255, 255, 255, SDL_ALPHA_OPAQUE);
+        renderer.DrawRect(rect);
 
         // show renderer
-        SDL_RenderPresent(renderer);
+        renderer.Present();
     }
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
     return 0;
+} catch (std::exception& e) {
+    fprintf(stderr, "Error: %s\n", e.what());
+	return 1;
 }
