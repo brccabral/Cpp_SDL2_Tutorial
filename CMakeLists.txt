@@ -6,6 +6,7 @@ include(GNUInstallDirs)
 find_package(sdlcpp REQUIRED)
 find_package(SDL2pp REQUIRED)
 
+add_subdirectory(sdl2tutorial)
 add_subdirectory(00_Intro)
 add_subdirectory(01_Surface)
 add_subdirectory(02_RenderDraw)

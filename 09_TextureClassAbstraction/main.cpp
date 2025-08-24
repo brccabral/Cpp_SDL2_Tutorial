@@ -1,9 +1,6 @@
 #include <string>
 #include <vector>
-#include <SDL2pp/SDL2pp.hh>
-
-#include "ResourceManager.h"
-#include "TextureRectangle.h"
+#include <sdl2tutorial/SDL2Tutorial.hpp>
 
 
 int main()

@@ -1,6 +1,6 @@
-#include "AnimatedSprite.hpp"
+#include <sdl2tutorial/AnimatedSprite.hpp>
 
-#include "ResourceManager.h"
+#include <sdl2tutorial/ResourceManager.h>
 
 AnimatedSprite::AnimatedSprite(SDL2pp::Renderer &renderer, const std::string &filepath)
     : texture(renderer, ResourceManager::GetInstance().GetSurface(filepath))

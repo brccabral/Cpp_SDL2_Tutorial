@@ -1,5 +1,5 @@
-#include "TextureRectangle.h"
-#include "ResourceManager.h"
+#include <sdl2tutorial/TextureRectangle.h>
+#include <sdl2tutorial/ResourceManager.h>
 
 
 TextureRectangle::TextureRectangle(SDL2pp::Renderer& renderer, const std::string &filepath)

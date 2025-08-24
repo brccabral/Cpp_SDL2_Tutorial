@@ -1,4 +1,4 @@
-#include "ResourceManager.h"
+#include <sdl2tutorial/ResourceManager.h>
 
 ResourceManager::ResourceManager()
 {
