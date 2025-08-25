@@ -1,7 +1,4 @@
-#include <SDL2/SDL.h>
-
-#include "TextureRectangle.h"
-#include "SDLApp.hpp"
+#include <sdl2tutorial/SDL2Tutorial.hpp>
 
 class MyGame : public SDLApp
 {
@@ -41,8 +38,8 @@ public:
     void RenderCallback() override
     {
         // draw stuff
-        SDL_SetRenderDrawColor(GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawLine(GetRenderer(), 10, 10, GetMouseX(), GetMouseY());
+        GetRenderer().SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
+        GetRenderer().DrawLine(10, 10, GetMouseX(), GetMouseY());
 
         object1.Draw(50, 50, 100, 100);
         object2.Draw(GetMouseX(), GetMouseY(), 100, 100);

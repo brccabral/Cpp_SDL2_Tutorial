@@ -1,32 +1,15 @@
-#include "SDLApp.hpp"
-#include "ResourceManager.h"
+#include <sdl2tutorial/SDLApp.hpp>
+#include <sdl2tutorial/ResourceManager.h>
 
 SDLApp::SDLApp(const char *title, const int x, const int y, const int w, const int h)
+    : sdl(SDL_INIT_VIDEO), window(title, x, y, w, h, SDL_WINDOW_SHOWN),
+    renderer(window, -1, SDL_RENDERER_ACCELERATED)
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
-    }
-
-    window = SDL_CreateWindow(title, x, y, w, h, SDL_WINDOW_SHOWN);
-    if (window == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
-    }
-
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
-    }
 }
 
 SDLApp::~SDLApp()
 {
     ResourceManager::Destroy();
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
 }
 
 void SDLApp::RunLoop()
@@ -47,12 +30,12 @@ void SDLApp::RunLoop()
         EventCallback();
 
         // clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(renderer);
+        renderer.SetDrawColor(0, 0, 0, SDL_ALPHA_OPAQUE);
+        renderer.Clear();
 
         RenderCallback();
 
-        SDL_RenderPresent(renderer);
+        renderer.Present();
 
         // FPS
         const Uint64 frameTime = ((SDL_GetPerformanceCounter() - now) * 1000) /
@@ -64,7 +47,7 @@ void SDLApp::RunLoop()
     }
 }
 
-SDL_Renderer *SDLApp::GetRenderer() const
+SDL2pp::Renderer &SDLApp::GetRenderer()
 {
     return renderer;
 }

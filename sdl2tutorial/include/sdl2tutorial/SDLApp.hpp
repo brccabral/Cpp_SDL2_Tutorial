@@ -2,6 +2,8 @@
 #include <functional>
 #include <SDL2/SDL.h>
 
+#include "SDL2pp/SDL2pp.hh"
+
 
 class SDLApp
 {
@@ -15,19 +17,20 @@ public:
 
     void RunLoop();
 
-    SDL_Renderer *GetRenderer() const;
+    SDL2pp::Renderer &GetRenderer();
     int GetMouseX() const;
     int GetMouseY() const;
     void StopGame();
 
 private:
 
-    SDL_Window *window{};
-    SDL_Renderer *renderer{};
+    SDL2pp::SDL sdl;
+    SDL2pp::Window window;
+    SDL2pp::Renderer renderer;
 
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
 
     bool gameIsRunning = true;
-    int mouseX, mouseY;
+    int mouseX{}, mouseY{};
 };
