@@ -5,7 +5,7 @@ class MyGame : public SDLApp
 public:
 
     MyGame(const char *title, const int x, const int y, const int w, const int h) :
-        SDLApp(title, x, y, w, h), object1(GetRenderer(), "images/test.bmp"),
+        SDLApp(SDL_INIT_VIDEO, title, x, y, w, h), object1(GetRenderer(), "images/test.bmp"),
         object2(GetRenderer(), "images/test.bmp")
     {
         object1.SetPosition(50, 50);
@@ -50,7 +50,9 @@ public:
         object2.Render(GetRenderer());
     }
 
-    void UpdateCallback(const double deltaTime) override{};
+    void UpdateCallback(const double deltaTime) override
+    {
+    };
 
 private:
 

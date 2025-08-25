@@ -5,7 +5,7 @@ class MyGame : public SDLApp
 public:
 
     MyGame(const char *title, const int x, const int y, const int w, const int h) :
-        SDLApp(title, x, y, w, h), object1(&GetRenderer()),
+        SDLApp(SDL_INIT_VIDEO, title, x, y, w, h), object1(&GetRenderer()),
         object2(&GetRenderer())
     {
         object1.SetTextureRect("images/test.bmp");
@@ -54,7 +54,9 @@ public:
         object2.Render();
     }
 
-    void UpdateCallback(const double deltaTime) override {};
+    void UpdateCallback(const double deltaTime) override
+    {
+    };
 
 private:
 
@@ -65,7 +67,7 @@ private:
 int main()
 {
     {
-        MyGame app("SDL2 App Abstraction", 20, 20, 640, 480);
+        MyGame app("SDL2 GameObject", 20, 20, 640, 480);
         app.SetFPS(30);
         app.RunLoop();
     }

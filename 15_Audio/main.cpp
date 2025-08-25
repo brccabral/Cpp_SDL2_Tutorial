@@ -1,9 +1,5 @@
-#include <SDL2/SDL.h>
+#include <sdl2tutorial/SDL2Tutorial.hpp>
 
-#include "GameObject.hpp"
-#include "TextureRectangle.h"
-#include "SDLApp.hpp"
-#include "Sound.hpp"
 
 class MyGame : public SDLApp
 {
@@ -12,8 +8,10 @@ public:
     MyGame(
             const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
             const int h) :
-        SDLApp(subsystemFlags, title, x, y, w, h), object1(GetRenderer()),
-        object2(GetRenderer()), collision_sound("assets/sounds/collide.wav")
+        SDLApp(subsystemFlags, title, x, y, w, h), object1(&GetRenderer()),
+        object2(&GetRenderer()),
+        collision_sound(
+                "assets/sounds/collide.wav", "Dell D3100 Docking Station Digital Stereo (IEC958)")
     {
         int index = 0;
 
@@ -35,8 +33,6 @@ public:
         index = object2.AddCollider2D();
         object2.GetCollider2D(index).SetRelPosition(25, 50);
         object2.GetCollider2D(index).SetDimensions(50, 25);
-
-        collision_sound.SetupDevice();
     }
 
     void EventCallback() override
@@ -74,8 +70,8 @@ public:
     void RenderCallback() override
     {
         // draw stuff
-        SDL_SetRenderDrawColor(GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawLine(GetRenderer(), 10, 10, GetMouseX(), GetMouseY());
+        GetRenderer().SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
+        GetRenderer().DrawLine(10, 10, GetMouseX(), GetMouseY());
 
         object1.Render();
         object2.Render();
@@ -91,11 +87,11 @@ public:
 
         if (obj1Rect.x > 640 || obj1Rect.x < 0)
         {
-            obj1SpeedX = -1;
+            obj1SpeedX *= -1;
         }
         if (obj1Rect.y > 480 || obj1Rect.y < 0)
         {
-            obj1SpeedY = -1;
+            obj1SpeedY *= -1;
         }
         x += obj1SpeedX * 60 * deltaTime;
         y += obj1SpeedY * 60 * deltaTime;
@@ -110,13 +106,13 @@ private:
     GameObject object1;
     GameObject object2;
 
-    Sound collision_sound{};
+    Sound collision_sound;
 };
 
 int main()
 {
     {
-        MyGame app(SDL_INIT_VIDEO | SDL_INIT_AUDIO, "SDL2 App Abstraction", 20, 20, 640, 480);
+        MyGame app(SDL_INIT_VIDEO | SDL_INIT_AUDIO, "SDL2 Audio", 20, 20, 640, 480);
         app.SetFPS(30);
         app.RunLoop();
     }

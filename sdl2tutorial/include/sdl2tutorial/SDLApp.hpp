@@ -1,15 +1,12 @@
 #pragma once
-#include <functional>
-#include <SDL2/SDL.h>
-
-#include "SDL2pp/SDL2pp.hh"
+#include <SDL2pp/SDL2pp.hh>
 
 
 class SDLApp
 {
 public:
 
-    SDLApp(const char *title, int x, int y, int w, int h);
+    SDLApp(Uint32 subsystemFlags, const char *title, int x, int y, int w, int h);
     virtual ~SDLApp();
 
     virtual void EventCallback() = 0;
