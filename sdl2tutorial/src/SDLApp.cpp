@@ -7,6 +7,7 @@ SDLApp::SDLApp(
     : sdl(subsystemFlags), window(title, x, y, w, h, SDL_WINDOW_SHOWN),
       renderer(window, -1, SDL_RENDERER_ACCELERATED)
 {
+    ResourceManager::GetInstance();
 }
 
 SDLApp::~SDLApp()

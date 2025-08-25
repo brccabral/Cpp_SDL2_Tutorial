@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sdl2tutorial/SDL2Tutorial.hpp>
+#include <SDL2pp/SDL2pp.hh>
 #include "TextureRectangle.h"
 #include "Collider2D.hpp"
 

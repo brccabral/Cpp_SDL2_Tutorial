@@ -9,10 +9,8 @@ public:
             const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
             const int h) :
         SDLApp(subsystemFlags, title, x, y, w, h),
-        collision_sound(
-                "assets/sounds/Collide.wav", "Dell D3100 Docking Station Digital Stereo (IEC958)"),
-        score_sound(
-                "assets/sounds/Score.wav", "Dell D3100 Docking Station Digital Stereo (IEC958)"),
+        collision_sound("assets/sounds/Collide.wav"),
+        score_sound("assets/sounds/Score.wav"),
         left_score_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32),
         right_score_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32)
     {
@@ -53,6 +51,9 @@ public:
 
         left_score_text.SetPosition({0, 0, 100, 50});
         right_score_text.SetPosition({500, 0, 100, 50});
+
+        ResourceManager::GetInstance().SetAudioDevice(
+                "Dell D3100 Docking Station Digital Stereo (IEC958)");
     }
 
     void EventCallback() override
@@ -133,12 +134,12 @@ public:
             if (ball_x < 0)
             {
                 left_score++;
-                score_sound.Play();
+                score_sound.Play(ResourceManager::GetInstance().GetAudioDevice());
             }
             if (ball_x > GetWindowWidth() - 20)
             {
                 right_score++;
-                score_sound.Play();
+                score_sound.Play(ResourceManager::GetInstance().GetAudioDevice());
             }
             ball_x = GetWindowWidth() / 2 - 10;
             ball_y = GetWindowHeight() / 2 - 10;
@@ -149,12 +150,12 @@ public:
         if (ball.IsColliding(left_paddle.GetAllColliders()))
         {
             ball_direction.x = 1;
-            collision_sound.Play();
+            collision_sound.Play(ResourceManager::GetInstance().GetAudioDevice());
         }
         else if (ball.IsColliding(right_paddle.GetAllColliders()))
         {
             ball_direction.x = -1;
-            collision_sound.Play();
+            collision_sound.Play(ResourceManager::GetInstance().GetAudioDevice());
         }
 
         left_paddle.Update(deltaTime);

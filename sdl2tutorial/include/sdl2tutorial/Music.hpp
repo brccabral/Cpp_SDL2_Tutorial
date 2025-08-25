@@ -1,20 +1,17 @@
 #pragma once
 
-#include <string>
-#include <SDL2/SDL_mixer.h>
+#include <SDL2pp/SDL2pp.hh>
 
 class Music
 {
 public:
 
-    Music() = default;
     explicit Music(const std::string &filepath);
-    ~Music();
 
     // loops: 0 = never, -1 = forever
     void Play(int loops) const;
 
 private:
 
-    Mix_Music *m_music = nullptr;
+    SDL2pp::Music m_music;
 };

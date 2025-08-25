@@ -9,8 +9,7 @@ public:
             const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
             const int h) :
         SDLApp(subsystemFlags, title, x, y, w, h),
-        collision_sound(
-                "assets/sounds/collide.wav", "Dell D3100 Docking Station Digital Stereo (IEC958)")
+        collision_sound("assets/sounds/collide.wav")
     {
         int index = 0;
 
@@ -32,6 +31,9 @@ public:
         index = object2.AddCollider2D();
         object2.GetCollider2D(index).SetRelPosition(25, 50);
         object2.GetCollider2D(index).SetDimensions(50, 25);
+
+        ResourceManager::GetInstance().SetAudioDevice(
+                "Dell D3100 Docking Station Digital Stereo (IEC958)");
     }
 
     void EventCallback() override
@@ -56,7 +58,7 @@ public:
             {
                 if (object1.IsColliding(object2.GetAllColliders()))
                 {
-                    collision_sound.Play();
+                    collision_sound.Play(ResourceManager::GetInstance().GetAudioDevice());
                 }
             }
             if (event.type == SDL_MOUSEMOTION)
