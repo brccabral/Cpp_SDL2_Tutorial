@@ -20,9 +20,8 @@ public:
     void StopGame();
     void SetFPS(int fps);
 
-protected:
-
-    SDL2pp::Renderer renderer;
+    int GetWindowWidth() const;
+    int GetWindowHeight() const;
 
 private:
 

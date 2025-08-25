@@ -21,6 +21,8 @@ public:
 
     void SetPosition(int x, int y);
     void SetDimensions(int w, int h);
+    int GetPositionX() const;
+    int GetPositionY() const;
 
     SDL_bool IsColliding(const TextureRectangle &other) const;
 

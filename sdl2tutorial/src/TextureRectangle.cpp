@@ -46,6 +46,16 @@ void TextureRectangle::SetDimensions(const int w, const int h)
     destRect.h = h;
 }
 
+int TextureRectangle::GetPositionX() const
+{
+    return destRect.x;
+}
+
+int TextureRectangle::GetPositionY() const
+{
+    return destRect.y;
+}
+
 void TextureRectangle::Render(SDL2pp::Renderer &renderer)
 {
     renderer.Copy(*texture, SDL2pp::NullOpt, destRect);

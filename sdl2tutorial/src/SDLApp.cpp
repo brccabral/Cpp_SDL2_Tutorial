@@ -70,3 +70,13 @@ void SDLApp::SetFPS(const int fps)
     FPS = fps;
     frameDelay = 1000 / FPS;
 }
+
+int SDLApp::GetWindowWidth() const
+{
+    return window.GetWidth();
+}
+
+int SDLApp::GetWindowHeight() const
+{
+    return window.GetHeight();
+}
