@@ -1,64 +1,23 @@
-#include <SDL2/SDL.h>
+#include <sdl2tutorial/SDL2Tutorial.hpp>
+
 
 int main()
+try
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
-        return 1;
-    }
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-    SDL_Window *window = SDL_CreateWindow(
+    SDL2pp::Window window(
             "C++ SDL2 Window",
             20,
             20,
             640,
             480,
             SDL_WINDOW_SHOWN);
-    if (window == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
+    SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    SDL_Surface *surface = SDL_LoadBMP("images/test.bmp");
-    if (surface == nullptr)
-    {
-        fprintf(stderr, "SDL_LoadBMP Error: %s\n", SDL_GetError());
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-    if (texture == nullptr)
-    {
-        fprintf(stderr, "SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
-        SDL_FreeSurface(surface);
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_FreeSurface(surface);
-
-    // image destination
-    constexpr SDL_Rect rect = {50, 50, 150, 150};
-    SDL_Rect mouse_rect = {0, 0, 150, 150};
-
-    // center = rotating point from destination rect position
-    constexpr SDL_Point center = {rect.w / 2, rect.h / 2};
+    const int FPS = 60;
+    const int frameDelay = 1000 / FPS;
 
     bool gameIsRunning = true;
 
@@ -66,8 +25,16 @@ int main()
     Uint64 last = 0;
     double deltaTime = 0.0; // seconds
 
-    constexpr int FPS = 60;
-    constexpr int frameDelay = 1000 / FPS;
+    SDL2pp::Surface surface{"images/test.bmp"};
+
+    SDL2pp::Texture texture{renderer, surface};
+
+    // image destination
+    constexpr SDL2pp::Rect rect{50, 50, 150, 150};
+    SDL2pp::Rect mouse_rect{0, 0, 150, 150};
+
+    // center = rotating point from destination rect position
+    constexpr SDL2pp::Point center{rect.w / 2, rect.h / 2};
 
     while (gameIsRunning)
     {
@@ -103,28 +70,28 @@ int main()
         }
 
         // clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(renderer);
+        renderer.SetDrawColor(0, 0, 0, SDL_ALPHA_OPAQUE);
+        renderer.Clear();
 
         // draw stuff
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawRect(renderer, &rect);
+        renderer.SetDrawColor(255, 255, 255, SDL_ALPHA_OPAQUE);
+        renderer.DrawRect(rect);
 
-        SDL_Rect intersection;
-        if (SDL_IntersectRect(&rect, &mouse_rect, &intersection))
+        SDL2pp::Optional<SDL2pp::Rect> intersection;
+        if ((intersection = rect.GetIntersection(mouse_rect)))
         {
-            SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &intersection);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            renderer.SetDrawColor(255, 0, 255, SDL_ALPHA_OPAQUE);
+            renderer.DrawRect(intersection.value());
+            renderer.SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
         }
-        SDL_RenderDrawRect(renderer, &mouse_rect);
+        renderer.DrawRect(mouse_rect);
 
         static double angle = 0;
         angle += 1;
-        SDL_RenderCopyEx(renderer, texture, nullptr, &rect, angle, &center, SDL_FLIP_NONE);
+        renderer.Copy(texture, SDL2pp::NullOpt, rect, angle, center, SDL_FLIP_NONE);
 
         // show renderer
-        SDL_RenderPresent(renderer);
+        renderer.Present();
 
         // FPS
         const Uint64 frameTime = ((SDL_GetPerformanceCounter() - now) * 1000) /
@@ -135,10 +102,10 @@ int main()
         }
     }
 
-    SDL_DestroyTexture(texture);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
     return 0;
+}
+catch (std::exception &e)
+{
+    fprintf(stderr, "Error: %s\n", e.what());
+    return 1;
 }
