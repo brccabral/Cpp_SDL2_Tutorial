@@ -66,3 +66,9 @@ void SDLApp::StopGame()
 {
     gameIsRunning = false;
 }
+
+void SDLApp::SetFPS(const int fps)
+{
+    FPS = fps;
+    frameDelay = 1000 / FPS;
+}

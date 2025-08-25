@@ -4,3 +4,4 @@
 #include "ResourceManager.h"
 #include "AnimatedSprite.hpp"
 #include "SDLApp.hpp"
+#include "GameObject.hpp"

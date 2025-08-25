@@ -1,16 +1,12 @@
-#include <SDL2/SDL.h>
-
-#include "GameObject.hpp"
-#include "TextureRectangle.h"
-#include "SDLApp.hpp"
+#include <sdl2tutorial/SDL2Tutorial.hpp>
 
 class MyGame : public SDLApp
 {
 public:
 
     MyGame(const char *title, const int x, const int y, const int w, const int h) :
-        SDLApp(title, x, y, w, h), object1(GetRenderer(), "images/test.bmp"),
-        object2(GetRenderer(), "images/test.bmp")
+        SDLApp(title, x, y, w, h), object1(&GetRenderer(), "images/test.bmp"),
+        object2(&GetRenderer(), "images/test.bmp")
     {
         object1.GetTextureRectangle().SetPosition(50, 50);
         object1.GetTextureRectangle().SetDimensions(100, 100);
@@ -47,8 +43,8 @@ public:
     void RenderCallback() override
     {
         // draw stuff
-        SDL_SetRenderDrawColor(GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawLine(GetRenderer(), 10, 10, GetMouseX(), GetMouseY());
+        GetRenderer().SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
+        GetRenderer().DrawLine(10, 10, GetMouseX(), GetMouseY());
 
         object2.GetTextureRectangle().SetPosition(GetMouseX(), GetMouseY());
 

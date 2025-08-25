@@ -19,10 +19,14 @@ TextureRectangle &TextureRectangle::operator=(TextureRectangle &&other) noexcept
     return *this;
 }
 
-void TextureRectangle::SetDestRect(const int x, const int y, const int w, const int h)
+void TextureRectangle::SetPosition(const int x, const int y)
 {
     destRect.x = x;
     destRect.y = y;
+}
+
+void TextureRectangle::SetDimensions(const int w, const int h)
+{
     destRect.w = w;
     destRect.h = h;
 }
@@ -30,14 +34,6 @@ void TextureRectangle::SetDestRect(const int x, const int y, const int w, const 
 void TextureRectangle::Render(SDL2pp::Renderer &renderer)
 {
     renderer.Copy(texture, SDL2pp::NullOpt, destRect);
-}
-
-void TextureRectangle::Draw(const int x, const int y, const int w, const int h)
-{
-    destRect.x = x;
-    destRect.y = y;
-    destRect.w = w;
-    destRect.h = h;
 }
 
 SDL_bool TextureRectangle::IsColliding(const TextureRectangle &other) const

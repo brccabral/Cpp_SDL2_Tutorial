@@ -8,16 +8,16 @@ class GameObject
 public:
 
     GameObject();
-    GameObject(SDL_Renderer *renderer, std::string sprite_path);
+    GameObject(SDL2pp::Renderer *renderer, const std::string &sprite_path);
     ~GameObject();
 
     void Update();
-    void Render() const;
+    void Render();
 
     TextureRectangle &GetTextureRectangle();
 
 private:
 
-    TextureRectangle m_sprite{};
-    SDL_Renderer *m_renderer{};
+    TextureRectangle m_sprite;
+    SDL2pp::Renderer *m_renderer{};
 };
