@@ -14,7 +14,13 @@ public:
     TextureRectangle &operator=(TextureRectangle &&) noexcept;
 
     void SetDestRect(int x, int y, int w, int h);
-    void Render(SDL2pp::Renderer *renderer);
+    void Render(SDL2pp::Renderer &renderer);
+
+    void Draw(int x, int y, int w, int h);
+
+    SDL_bool IsColliding(const TextureRectangle &other) const;
+
+    const SDL2pp::Rect &GetDestRect() const;
 
 private:
 

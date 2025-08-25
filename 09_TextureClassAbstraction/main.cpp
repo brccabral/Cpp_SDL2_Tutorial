@@ -83,7 +83,7 @@ try
 
         for (auto &texture_rect: textureRects)
         {
-            texture_rect.Render(&renderer);
+            texture_rect.Render(renderer);
         }
 
         // show renderer
