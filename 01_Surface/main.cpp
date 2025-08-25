@@ -21,7 +21,7 @@ try
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
     SDL2pp::Window window(
-            "C++ SDL2 Window",
+            "C++ SDL2 01_Surface",
             20,
             20,
             640,

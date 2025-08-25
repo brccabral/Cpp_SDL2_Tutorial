@@ -278,7 +278,7 @@ int main()
 {
     {
         MyGame app(
-                SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER, "SDL2 App Abstraction", 20, 20,
+                SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER, "SDL2 19_Timer", 20, 20,
                 640, 480);
         app.SetFPS(60);
         app.RunLoop();

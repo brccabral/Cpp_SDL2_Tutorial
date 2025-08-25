@@ -101,7 +101,7 @@ private:
 int main()
 {
     {
-        MyGame app("SDL2 CollisionComponent", 20, 20, 640, 480);
+        MyGame app("SDL2 14_CollisionComponent", 20, 20, 640, 480);
         app.SetFPS(30);
         app.RunLoop();
     }

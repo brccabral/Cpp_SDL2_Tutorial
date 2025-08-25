@@ -66,7 +66,7 @@ private:
 int main()
 {
     {
-        MyGame app("SDL2 GameObject", 20, 20, 640, 480);
+        MyGame app("SDL2 13_GameObject", 20, 20, 640, 480);
         app.SetFPS(30);
         app.RunLoop();
     }

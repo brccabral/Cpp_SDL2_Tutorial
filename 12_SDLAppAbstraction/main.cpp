@@ -63,7 +63,7 @@ private:
 int main()
 {
     {
-        MyGame app("SDL2 App Abstraction", 20, 20, 640, 480);
+        MyGame app("SDL2 12_SDLAppAbstraction", 20, 20, 640, 480);
         app.RunLoop();
     }
 

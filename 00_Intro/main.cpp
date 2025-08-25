@@ -12,7 +12,7 @@ int main()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    const sdl::Window window{"C++ SDL2 Window", sdl::Size{640, 480},
+    const sdl::Window window{"C++ SDL2 00_Intro", sdl::Size{640, 480},
                              SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL};
 
     SDL_GLContext context = SDL_GL_CreateContext(window);

@@ -113,7 +113,7 @@ private:
 int main()
 {
     {
-        MyGame app(SDL_INIT_VIDEO | SDL_INIT_AUDIO, "SDL2 Audio", 20, 20, 640, 480);
+        MyGame app(SDL_INIT_VIDEO | SDL_INIT_AUDIO, "SDL2 15_Audio", 20, 20, 640, 480);
         app.SetFPS(30);
         app.RunLoop();
     }

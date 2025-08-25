@@ -191,7 +191,7 @@ private:
 int main()
 {
     {
-        MyGame app(SDL_INIT_VIDEO | SDL_INIT_AUDIO, "SDL2 Pong", 20, 20, 640, 480);
+        MyGame app(SDL_INIT_VIDEO | SDL_INIT_AUDIO, "SDL2 17_Pong", 20, 20, 640, 480);
         app.SetFPS(60);
         app.RunLoop();
     }
