@@ -81,3 +81,20 @@ int SDLApp::GetWindowHeight() const
 {
     return window.GetHeight();
 }
+
+SDL_TimerID SDLApp::AddTimer(const Uint32 delay, const SDL_TimerCallback callback, void *param)
+{
+    SDL_TimerID id = SDL_AddTimer(delay, callback, param);
+    m_timers.emplace(id);
+    return id;
+}
+
+void SDLApp::RemoveTimer(const SDL_TimerID id)
+{
+    if (SDL_RemoveTimer(id) == SDL_FALSE)
+    {
+        fprintf(stderr, "RemoveTimer error");
+        return;
+    }
+    m_timers.erase(id);
+}

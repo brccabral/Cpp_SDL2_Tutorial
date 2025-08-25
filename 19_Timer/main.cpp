@@ -1,11 +1,4 @@
-#include <SDL2/SDL.h>
-
-#include "DynamicText.hpp"
-#include "GameObject.hpp"
-#include "Music.hpp"
-#include "TextureRectangle.h"
-#include "SDLApp.hpp"
-#include "Sound.hpp"
+#include <sdl2tutorial/SDL2Tutorial.hpp>
 
 class TimerParam
 {
@@ -34,8 +27,7 @@ public:
     MyGame(
             const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
             const int h) :
-        SDLApp(subsystemFlags, title, x, y, w, h), left_paddle(GetRenderer()),
-        right_paddle(GetRenderer()), ball(GetRenderer()),
+        SDLApp(subsystemFlags, title, x, y, w, h),
         collision_sound("assets/sounds/Collide.wav"),
         score_sound("assets/sounds/Score.wav"),
         left_score_text("assets/fonts/8bitOperatorPlus8-Regular.ttf", 32),
@@ -44,7 +36,7 @@ public:
     {
         int index = 0;
 
-        left_paddle.SetTextureRect("assets/images/leftpaddle.bmp");
+        left_paddle.SetTextureRect(renderer, "assets/images/leftpaddle.bmp");
         left_paddle.GetTextureRectangle().SetDimensions(20, 200);
 
         index = left_paddle.AddCollider2D();
@@ -54,7 +46,7 @@ public:
         left_paddle.SetPosition(10, 200);
         left_paddle.Update(0);
 
-        right_paddle.SetTextureRect("assets/images/rightpaddle.bmp");
+        right_paddle.SetTextureRect(renderer, "assets/images/rightpaddle.bmp");
         right_paddle.GetTextureRectangle().SetDimensions(20, 200);
 
         index = right_paddle.AddCollider2D();
@@ -64,7 +56,7 @@ public:
         right_paddle.SetPosition(610, 200);
         right_paddle.Update(0);
 
-        ball.SetTextureRect("assets/images/ball.bmp");
+        ball.SetTextureRect(renderer, "assets/images/ball.bmp");
         ball.GetTextureRectangle().SetDimensions(20, 20);
 
         index = ball.AddCollider2D();
@@ -77,13 +69,17 @@ public:
         ball_direction.x = (rand() % 2) * 2 - 1;
         ball_direction.y = (rand() % 2) * 2 - 1;
 
-        collision_sound.SetupDevice();
-        score_sound.SetupDevice();
-
         left_score_text.SetPosition({0, 0, 100, 50});
         right_score_text.SetPosition({500, 0, 100, 50});
 
-        SetVolume(MIX_MAX_VOLUME / 4);
+        ResourceManager::GetInstance().SetMixerDevice(
+                "Dell D3100 Docking Station Digital Stereo (IEC958)");
+        ResourceManager::GetInstance().SetAudioDevice(
+                "Dell D3100 Docking Station Digital Stereo (IEC958)");
+
+        auto &mixer = ResourceManager::GetInstance().GetMixer();
+        mixer.SetVolume(-1, MIX_MAX_VOLUME / 16);
+        mixer.SetMusicVolume(MIX_MAX_VOLUME / 16);
         main_music.Play(-1);
 
         simple_timer = AddTimer(5000, simple_callback, &simple_param);
@@ -157,9 +153,9 @@ public:
     void RenderCallback() override
     {
         // draw stuff
-        left_paddle.Render();
-        right_paddle.Render();
-        ball.Render();
+        left_paddle.Render(renderer);
+        right_paddle.Render(renderer);
+        ball.Render(renderer);
 
         left_score_text.Render(renderer);
         right_score_text.Render(renderer);
@@ -180,12 +176,12 @@ public:
             if (ball_x < 0)
             {
                 left_score++;
-                score_sound.Play();
+                score_sound.Play(ResourceManager::GetInstance().GetAudioDevice());
             }
             if (ball_x > GetWindowWidth() - 20)
             {
                 right_score++;
-                score_sound.Play();
+                score_sound.Play(ResourceManager::GetInstance().GetAudioDevice());
             }
             ball_x = GetWindowWidth() / 2 - 10;
             ball_y = GetWindowHeight() / 2 - 10;
@@ -196,12 +192,12 @@ public:
         if (ball.IsColliding(left_paddle.GetAllColliders()))
         {
             ball_direction.x = 1;
-            collision_sound.Play();
+            collision_sound.Play(ResourceManager::GetInstance().GetAudioDevice());
         }
         else if (ball.IsColliding(right_paddle.GetAllColliders()))
         {
             ball_direction.x = -1;
-            collision_sound.Play();
+            collision_sound.Play(ResourceManager::GetInstance().GetAudioDevice());
         }
 
         left_paddle.Update(deltaTime);
@@ -221,19 +217,19 @@ private:
     GameObject right_paddle{};
     GameObject ball{};
 
-    Sound collision_sound{};
-    Sound score_sound{};
+    Sound collision_sound;
+    Sound score_sound;
 
     Uint32 left_score{};
-    DynamicText left_score_text{};
+    DynamicText left_score_text;
     Uint32 right_score{};
-    DynamicText right_score_text{};
+    DynamicText right_score_text;
 
     float movement_speed{5.0f};
     float ball_speed{2.0f};
     SDL_Point ball_direction{};
 
-    Music main_music{};
+    Music main_music;
 
     static Uint32 MY_EVENT;
     TimerParam simple_param{5};
