@@ -5,11 +5,10 @@ class MyGame : public SDLApp
 public:
 
     MyGame(const char *title, const int x, const int y, const int w, const int h) :
-        SDLApp(SDL_INIT_VIDEO, title, x, y, w, h), object1(&GetRenderer()),
-        object2(&GetRenderer())
+        SDLApp(SDL_INIT_VIDEO, title, x, y, w, h)
     {
-        object1.SetTextureRect("images/test.bmp");
-        object2.SetTextureRect("images/test.bmp");
+        object1.SetTextureRect(renderer, "images/test.bmp");
+        object2.SetTextureRect(renderer, "images/test.bmp");
         object1.GetTextureRectangle().SetPosition(50, 50);
         object1.GetTextureRectangle().SetDimensions(100, 100);
         object2.GetTextureRectangle().SetDimensions(100, 100);
@@ -45,13 +44,13 @@ public:
     void RenderCallback() override
     {
         // draw stuff
-        GetRenderer().SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
-        GetRenderer().DrawLine(10, 10, GetMouseX(), GetMouseY());
+        renderer.SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
+        renderer.DrawLine(10, 10, GetMouseX(), GetMouseY());
 
         object2.GetTextureRectangle().SetPosition(GetMouseX(), GetMouseY());
 
-        object1.Render();
-        object2.Render();
+        object1.Render(renderer);
+        object2.Render(renderer);
     }
 
     void UpdateCallback(const double deltaTime) override
@@ -60,8 +59,8 @@ public:
 
 private:
 
-    GameObject object1;
-    GameObject object2;
+    GameObject object1{};
+    GameObject object2{};
 };
 
 int main()

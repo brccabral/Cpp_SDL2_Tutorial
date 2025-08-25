@@ -1,13 +1,6 @@
 #include <sdl2tutorial/GameObject.hpp>
 
 
-GameObject::GameObject(SDL2pp::Renderer *renderer)
-    : m_renderer(renderer)
-{
-}
-
-GameObject::~GameObject() = default;
-
 void GameObject::Update(const double deltaTime)
 {
     for (auto &m_collider: m_colliders)
@@ -16,20 +9,21 @@ void GameObject::Update(const double deltaTime)
     }
 }
 
-void GameObject::Render()
+void GameObject::Render(SDL2pp::Renderer &renderer)
 {
-    m_sprite.Render(*m_renderer);
+    m_sprite.Render(renderer);
 }
 
-void GameObject::SetTextureRect(const std::string &sprite_path)
+void GameObject::SetTextureRect(SDL2pp::Renderer &renderer, const std::string &sprite_path)
 {
-    m_sprite = TextureRectangle(*m_renderer, sprite_path);
+    m_sprite = TextureRectangle(renderer, sprite_path);
 }
 
 void GameObject::SetTextureRect(
+        SDL2pp::Renderer &renderer,
         const std::string &sprite_path, Uint8 redColorKey, Uint8 greenColorKey, Uint8 blueColorKey)
 {
-    m_sprite = TextureRectangle(*m_renderer, sprite_path, redColorKey, greenColorKey, blueColorKey);
+    m_sprite = TextureRectangle(renderer, sprite_path, redColorKey, greenColorKey, blueColorKey);
 }
 
 void GameObject::SetPosition(const int x, const int y)

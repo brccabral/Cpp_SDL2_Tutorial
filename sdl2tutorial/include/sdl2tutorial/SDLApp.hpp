@@ -15,17 +15,19 @@ public:
 
     void RunLoop();
 
-    SDL2pp::Renderer &GetRenderer();
     int GetMouseX() const;
     int GetMouseY() const;
     void StopGame();
     void SetFPS(int fps);
 
+protected:
+
+    SDL2pp::Renderer renderer;
+
 private:
 
     SDL2pp::SDL sdl;
     SDL2pp::Window window;
-    SDL2pp::Renderer renderer;
 
     int FPS = 60;
     int frameDelay = 1000 / FPS;

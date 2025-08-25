@@ -50,11 +50,6 @@ void SDLApp::RunLoop()
     }
 }
 
-SDL2pp::Renderer &SDLApp::GetRenderer()
-{
-    return renderer;
-}
-
 int SDLApp::GetMouseX() const
 {
     return mouseX;

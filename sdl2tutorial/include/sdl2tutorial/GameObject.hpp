@@ -8,15 +8,14 @@ class GameObject
 {
 public:
 
-    GameObject();
-    explicit GameObject(SDL2pp::Renderer *renderer);
-    ~GameObject();
+    GameObject() = default;
 
     void Update(double deltaTime);
-    void Render();
+    void Render(SDL2pp::Renderer &renderer);
 
-    void SetTextureRect(const std::string &sprite_path);
+    void SetTextureRect(SDL2pp::Renderer &renderer, const std::string &sprite_path);
     void SetTextureRect(
+            SDL2pp::Renderer &renderer,
             const std::string &sprite_path, Uint8 redColorKey, Uint8 greenColorKey,
             Uint8 blueColorKey);
     void SetPosition(int x, int y);
@@ -30,6 +29,5 @@ public:
 private:
 
     TextureRectangle m_sprite{};
-    SDL2pp::Renderer *m_renderer{};
     std::vector<Collider2D> m_colliders{};
 };

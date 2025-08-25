@@ -5,8 +5,8 @@ class MyGame : public SDLApp
 public:
 
     MyGame(const char *title, const int x, const int y, const int w, const int h) :
-        SDLApp(SDL_INIT_VIDEO, title, x, y, w, h), object1(GetRenderer(), "images/test.bmp"),
-        object2(GetRenderer(), "images/test.bmp")
+        SDLApp(SDL_INIT_VIDEO, title, x, y, w, h), object1(renderer, "images/test.bmp"),
+        object2(renderer, "images/test.bmp")
     {
         object1.SetPosition(50, 50);
         object1.SetDimensions(100, 100);
@@ -41,13 +41,13 @@ public:
     void RenderCallback() override
     {
         // draw stuff
-        GetRenderer().SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
-        GetRenderer().DrawLine(10, 10, GetMouseX(), GetMouseY());
+        renderer.SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
+        renderer.DrawLine(10, 10, GetMouseX(), GetMouseY());
 
         object2.SetPosition(GetMouseX(), GetMouseY());
 
-        object1.Render(GetRenderer());
-        object2.Render(GetRenderer());
+        object1.Render(renderer);
+        object2.Render(renderer);
     }
 
     void UpdateCallback(const double deltaTime) override

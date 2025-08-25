@@ -7,3 +7,4 @@
 #include "GameObject.hpp"
 #include "Collider2D.hpp"
 #include "Sound.hpp"
+#include "DynamicText.hpp"
