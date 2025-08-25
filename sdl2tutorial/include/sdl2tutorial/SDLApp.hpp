@@ -27,11 +27,16 @@ protected:
 private:
 
     SDL2pp::SDL sdl;
-    SDL2pp::Window window;
+    SDL2pp::Window window; // must be declared after sdl
 
     int FPS = 60;
     int frameDelay = 1000 / FPS;
 
     bool gameIsRunning = true;
     int mouseX{}, mouseY{};
+
+protected:
+
+    SDL2pp::Renderer renderer; // must be declared after window
+    SDL2pp::SDLTTF ttf;
 };
