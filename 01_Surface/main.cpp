@@ -20,7 +20,7 @@ try
 {
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-    SDL2pp::Window window (
+    SDL2pp::Window window(
             "C++ SDL2 Window",
             20,
             20,
@@ -69,8 +69,10 @@ try
     }
 
     return 0;
-} catch (std::exception& e) {
+}
+catch (std::exception &e)
+{
     fprintf(stderr, "Error: %s\n", e.what());
-	return 1;
+    return 1;
 }
 

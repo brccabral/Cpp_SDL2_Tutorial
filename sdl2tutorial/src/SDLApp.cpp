@@ -1,9 +1,11 @@
 #include <sdl2tutorial/SDLApp.hpp>
 #include <sdl2tutorial/ResourceManager.h>
 
-SDLApp::SDLApp(const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w, const int h)
+SDLApp::SDLApp(
+        const Uint32 subsystemFlags, const char *title, const int x, const int y, const int w,
+        const int h)
     : sdl(subsystemFlags), window(title, x, y, w, h, SDL_WINDOW_SHOWN),
-    renderer(window, -1, SDL_RENDERER_ACCELERATED)
+      renderer(window, -1, SDL_RENDERER_ACCELERATED)
 {
 }
 

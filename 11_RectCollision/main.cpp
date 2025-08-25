@@ -30,7 +30,7 @@ try
     TextureRectangle object2(renderer, "images/test.bmp");
 
     object1.SetPosition(50, 50);
-    object1.SetDimensions( 100, 100);
+    object1.SetDimensions(100, 100);
     object2.SetDimensions(100, 100);
 
     while (gameIsRunning)
@@ -93,7 +93,9 @@ try
     ResourceManager::Destroy();
 
     return 0;
-} catch (std::exception& e) {
+}
+catch (std::exception &e)
+{
     fprintf(stderr, "Error: %s\n", e.what());
-	return 1;
+    return 1;
 }

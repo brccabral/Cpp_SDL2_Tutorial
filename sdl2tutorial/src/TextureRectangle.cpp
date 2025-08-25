@@ -2,7 +2,7 @@
 #include <sdl2tutorial/ResourceManager.h>
 
 
-TextureRectangle::TextureRectangle(SDL2pp::Renderer& renderer, const std::string &filepath)
+TextureRectangle::TextureRectangle(SDL2pp::Renderer &renderer, const std::string &filepath)
     : texture(new SDL2pp::Texture(renderer, ResourceManager::GetInstance().GetSurface(filepath)))
 {
 }
@@ -11,10 +11,14 @@ TextureRectangle::TextureRectangle(
         SDL2pp::Renderer &renderer, const std::string &filepath, const Uint8 redColorKey,
         const Uint8 greenColorKey,
         const Uint8 blueColorKey)
-            : texture(new SDL2pp::Texture(renderer,
-                ResourceManager::GetInstance().GetSurface(filepath).SetColorKey(
-                    SDL_TRUE, SDL_MapRGB(ResourceManager::GetInstance().GetSurface(filepath).Get()->format,
-                        redColorKey, greenColorKey, blueColorKey))))
+    : texture(
+            new SDL2pp::Texture(
+                    renderer,
+                    ResourceManager::GetInstance().GetSurface(filepath).SetColorKey(
+                            SDL_TRUE, SDL_MapRGB(
+                                    ResourceManager::GetInstance().GetSurface(filepath).Get()->
+                                    format,
+                                    redColorKey, greenColorKey, blueColorKey))))
 {
 }
 
@@ -49,7 +53,7 @@ void TextureRectangle::Render(SDL2pp::Renderer &renderer)
 
 SDL_bool TextureRectangle::IsColliding(const TextureRectangle &other) const
 {
-    return (SDL_bool)destRect.Intersects(other.GetDestRect());
+    return (SDL_bool) destRect.Intersects(other.GetDestRect());
 }
 
 const SDL2pp::Rect &TextureRectangle::GetDestRect() const

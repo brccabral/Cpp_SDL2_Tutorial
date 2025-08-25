@@ -93,7 +93,9 @@ try
     ResourceManager::Destroy();
 
     return 0;
-} catch (std::exception& e) {
+}
+catch (std::exception &e)
+{
     fprintf(stderr, "Error: %s\n", e.what());
-	return 1;
+    return 1;
 }

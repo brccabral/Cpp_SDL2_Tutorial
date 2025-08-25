@@ -15,6 +15,7 @@ void GameObject::Update(const double deltaTime)
         m_collider.Update(deltaTime);
     }
 }
+
 void GameObject::Render()
 {
     m_sprite.Render(*m_renderer);

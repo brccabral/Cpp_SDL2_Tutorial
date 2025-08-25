@@ -7,11 +7,11 @@ class TextureRectangle
 {
 public:
 
-    TextureRectangle(){};
-    TextureRectangle(SDL2pp::Renderer& renderer, const std::string &filepath);
+    TextureRectangle() = default;
+    TextureRectangle(SDL2pp::Renderer &renderer, const std::string &filepath);
     TextureRectangle(
-        SDL2pp::Renderer &renderer, const std::string &filepath, Uint8 redColorKey,
-        Uint8 greenColorKey, Uint8 blueColorKey);
+            SDL2pp::Renderer &renderer, const std::string &filepath, Uint8 redColorKey,
+            Uint8 greenColorKey, Uint8 blueColorKey);
     TextureRectangle(const TextureRectangle &) = delete;
     TextureRectangle &operator=(const TextureRectangle &) = delete;
     TextureRectangle(TextureRectangle &&) noexcept;
@@ -21,7 +21,6 @@ public:
 
     void SetPosition(int x, int y);
     void SetDimensions(int w, int h);
-    void SetColorKey(Uint8 red, Uint8 green, Uint8 blue);
 
     SDL_bool IsColliding(const TextureRectangle &other) const;
 
