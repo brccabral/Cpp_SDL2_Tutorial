@@ -8,6 +8,9 @@ public:
         SDLApp(title, x, y, w, h), object1(GetRenderer(), "images/test.bmp"),
         object2(GetRenderer(), "images/test.bmp")
     {
+        object1.SetPosition(50, 50);
+        object1.SetDimensions(100, 100);
+        object2.SetDimensions(100, 100);
     }
 
     void EventCallback() override
@@ -41,12 +44,13 @@ public:
         GetRenderer().SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
         GetRenderer().DrawLine(10, 10, GetMouseX(), GetMouseY());
 
-        object1.Draw(50, 50, 100, 100);
-        object2.Draw(GetMouseX(), GetMouseY(), 100, 100);
+        object2.SetPosition(GetMouseX(), GetMouseY());
 
         object1.Render(GetRenderer());
         object2.Render(GetRenderer());
     }
+
+    void UpdateCallback(const double deltaTime) override{};
 
 private:
 

@@ -5,9 +5,11 @@ class MyGame : public SDLApp
 public:
 
     MyGame(const char *title, const int x, const int y, const int w, const int h) :
-        SDLApp(title, x, y, w, h), object1(&GetRenderer(), "images/test.bmp"),
-        object2(&GetRenderer(), "images/test.bmp")
+        SDLApp(title, x, y, w, h), object1(&GetRenderer()),
+        object2(&GetRenderer())
     {
+        object1.SetTextureRect("images/test.bmp");
+        object2.SetTextureRect("images/test.bmp");
         object1.GetTextureRectangle().SetPosition(50, 50);
         object1.GetTextureRectangle().SetDimensions(100, 100);
         object2.GetTextureRectangle().SetDimensions(100, 100);
@@ -51,6 +53,8 @@ public:
         object1.Render();
         object2.Render();
     }
+
+    void UpdateCallback(const double deltaTime) override {};
 
 private:
 

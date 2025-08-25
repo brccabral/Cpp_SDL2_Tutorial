@@ -39,7 +39,8 @@ try
 
         textureRects.push_back(TextureRectangle(renderer, "images/test.bmp"));
         auto &tr = textureRects.back();
-        tr.SetDestRect((50 * i) % 600, (50 * i) % 400, 150, 150);
+        tr.SetPosition((50 * i) % 600, (50 * i) % 400);
+        tr.SetDimensions(150, 150);
     }
 
     while (gameIsRunning)

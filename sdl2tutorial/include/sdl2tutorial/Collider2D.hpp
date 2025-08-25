@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL2/SDL.h>
+#include <SDL2pp/SDL2pp.hh>
 
 
 class Collider2D
@@ -17,11 +17,11 @@ public:
     void SetParentPosition(int x, int y);
 
     void Update(double deltaTime);
-    void Render(SDL_Renderer *renderer) const;
+    void Render(SDL2pp::Renderer &renderer) const;
 
 private:
 
-    SDL_Point parent_position{};
-    SDL_Point rel_position{};
-    SDL_Rect colliderRect{};
+    SDL2pp::Point parent_position{};
+    SDL2pp::Point rel_position{};
+    SDL2pp::Rect colliderRect{};
 };

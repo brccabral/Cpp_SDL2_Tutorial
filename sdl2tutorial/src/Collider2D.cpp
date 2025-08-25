@@ -1,4 +1,4 @@
-#include "Collider2D.hpp"
+#include <sdl2tutorial/Collider2D.hpp>
 
 SDL_bool Collider2D::IsColliding(const Collider2D &other) const
 {
@@ -29,8 +29,8 @@ void Collider2D::Update(double deltaTime)
     colliderRect.y = parent_position.y + rel_position.y;
 }
 
-void Collider2D::Render(SDL_Renderer *renderer) const
+void Collider2D::Render(SDL2pp::Renderer &renderer) const
 {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderDrawRect(renderer, &colliderRect);
+    renderer.SetDrawColor(255, 255, 0, SDL_ALPHA_OPAQUE);
+    renderer.DrawRect(colliderRect);
 }

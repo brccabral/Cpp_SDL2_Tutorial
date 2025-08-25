@@ -3,7 +3,18 @@
 
 
 TextureRectangle::TextureRectangle(SDL2pp::Renderer& renderer, const std::string &filepath)
-    : texture(renderer, ResourceManager::GetInstance().GetSurface(filepath))
+    : texture(new SDL2pp::Texture(renderer, ResourceManager::GetInstance().GetSurface(filepath)))
+{
+}
+
+TextureRectangle::TextureRectangle(
+        SDL2pp::Renderer &renderer, const std::string &filepath, const Uint8 redColorKey,
+        const Uint8 greenColorKey,
+        const Uint8 blueColorKey)
+            : texture(new SDL2pp::Texture(renderer,
+                ResourceManager::GetInstance().GetSurface(filepath).SetColorKey(
+                    SDL_TRUE, SDL_MapRGB(ResourceManager::GetInstance().GetSurface(filepath).Get()->format,
+                        redColorKey, greenColorKey, blueColorKey))))
 {
 }
 
@@ -33,7 +44,7 @@ void TextureRectangle::SetDimensions(const int w, const int h)
 
 void TextureRectangle::Render(SDL2pp::Renderer &renderer)
 {
-    renderer.Copy(texture, SDL2pp::NullOpt, destRect);
+    renderer.Copy(*texture, SDL2pp::NullOpt, destRect);
 }
 
 SDL_bool TextureRectangle::IsColliding(const TextureRectangle &other) const

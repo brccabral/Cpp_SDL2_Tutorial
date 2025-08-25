@@ -29,6 +29,10 @@ try
     TextureRectangle object1(renderer, "images/test.bmp");
     TextureRectangle object2(renderer, "images/test.bmp");
 
+    object1.SetPosition(50, 50);
+    object1.SetDimensions( 100, 100);
+    object2.SetDimensions(100, 100);
+
     while (gameIsRunning)
     {
         last = now;
@@ -69,8 +73,7 @@ try
         renderer.SetDrawColor(255, 0, 0, SDL_ALPHA_OPAQUE);
         renderer.DrawLine(10, 10, mouseX, mouseY);
 
-        object1.Draw(50, 50, 100, 100);
-        object2.Draw(mouseX, mouseY, 100, 100);
+        object2.SetPosition(mouseX, mouseY);
 
         object1.Render(renderer);
         object2.Render(renderer);

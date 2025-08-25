@@ -28,6 +28,7 @@ void SDLApp::RunLoop()
         Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
         EventCallback();
+        UpdateCallback(deltaTime);
 
         // clear screen
         renderer.SetDrawColor(0, 0, 0, SDL_ALPHA_OPAQUE);
