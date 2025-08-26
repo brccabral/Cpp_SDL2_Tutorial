@@ -38,4 +38,10 @@ Select
 
 Original is from https://github.com/vpenando/sdl-cpp  
 But this project needs changes that I have made, branch `brc` https://github.com/brccabral/sdl-cpp/tree/brc  
+Clone `brc` branch, and `cmake --target install`.
+
+## libSDL2pp setup
+
+Original is from https://github.com/libSDL2pp/libSDL2pp  
+But this project needs changes that I have made, branch `brc` https://github.com/brccabral/libSDL2pp/tree/brc  
 Clone `brc` branch, and `cmake --target install`.  
